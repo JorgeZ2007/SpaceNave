@@ -20,7 +20,7 @@ public class PantallaJuego implements Screen {
 	private SpriteBatch batch;
 	private Sound explosionSound;
 	private Music gameMusic;
-	private int score;
+	//private int score;
 	private int ronda;
 	private int velXAsteroides; 
 	private int velYAsteroides; 
@@ -32,11 +32,12 @@ public class PantallaJuego implements Screen {
 	private  ArrayList<Bullet> balas = new ArrayList<>();
 
 
-	public PantallaJuego(SpaceNavigation game, int ronda, int vidas, int score,  
+	public PantallaJuego(SpaceNavigation game, int ronda, int vidas,  
 			int velXAsteroides, int velYAsteroides, int cantAsteroides) {
 		this.game = game;
 		this.ronda = ronda;
-		this.score = score;
+		//this.score = score;
+		GestorPuntaje.getInstancia().reiniciarPuntaje(ronda) ;
 		this.velXAsteroides = velXAsteroides;
 		this.velYAsteroides = velYAsteroides;
 		this.cantAsteroides = cantAsteroides;
@@ -75,7 +76,7 @@ public class PantallaJuego implements Screen {
 		CharSequence str = "Vidas: "+nave.getVidas()+" Ronda: "+ronda;
 		game.getFont().getData().setScale(2f);		
 		game.getFont().draw(batch, str, 10, 30);
-		game.getFont().draw(batch, "Score:"+this.score, Gdx.graphics.getWidth()-150, 30);
+		game.getFont().draw(batch, "Score:"+GestorPuntaje.getInstancia().getPuntaje(), Gdx.graphics.getWidth()-150, 30);
 		game.getFont().draw(batch, "HighScore:"+game.getHighScore(), Gdx.graphics.getWidth()/2-100, 30);
 	}
 	@Override
@@ -94,7 +95,7 @@ public class PantallaJuego implements Screen {
 		            	 balls1.remove(j);
 		            	 balls2.remove(j);
 		            	 j--;
-		            	 score +=10;
+		            	 GestorPuntaje.getInstancia().derrotarEnemigo();
 		              }   	  
 		  	        }
 		                
@@ -139,8 +140,8 @@ public class PantallaJuego implements Screen {
   	        }
 	      
 	      if (nave.estaDestruido()) {
-  			if (score > game.getHighScore())
-  				game.setHighScore(score);
+  			if (GestorPuntaje.getInstancia().getPuntaje() > game.getHighScore())
+  				game.setHighScore(GestorPuntaje.getInstancia().getPuntaje());
 	    	Screen ss = new PantallaGameOver(game);
   			ss.resize(1200, 800);
   			game.setScreen(ss);
@@ -149,7 +150,7 @@ public class PantallaJuego implements Screen {
 	      batch.end();
 	      //nivel completado
 	      if (balls1.size()==0) {
-			Screen ss = new PantallaJuego(game,ronda+1, nave.getVidas(), score, 
+			Screen ss = new PantallaJuego(game,ronda+1, nave.getVidas(), 
 					velXAsteroides+3, velYAsteroides+3, cantAsteroides+10);
 			ss.resize(1200, 800);
 			game.setScreen(ss);
