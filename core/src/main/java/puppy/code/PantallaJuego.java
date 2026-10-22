@@ -32,15 +32,15 @@ public class PantallaJuego implements Screen {
 	private  ArrayList<Bullet> balas = new ArrayList<>();
 
 
-	public PantallaJuego(SpaceNavigation game, int ronda, int vidas,  
-			int velXAsteroides, int velYAsteroides, int cantAsteroides) {
+	public PantallaJuego(SpaceNavigation game, int ronda, int vidas) {
 		this.game = game;
 		this.ronda = ronda;
 		//this.score = score;
 		GestorPuntaje.getInstancia().reiniciarPuntaje(ronda) ;
-		this.velXAsteroides = velXAsteroides;
-		this.velYAsteroides = velYAsteroides;
-		this.cantAsteroides = cantAsteroides;
+		GestorRondas gestor=new GestorRondas(ronda) ;
+		this.velXAsteroides = gestor.gestionarVelocidadEnemigos() ;
+		this.velYAsteroides = gestor.gestionarVelocidadEnemigos() ;
+		this.cantAsteroides = gestor.generarEnemigos() ;
 		
 		batch = game.getBatch();
 		camera = new OrthographicCamera();	
@@ -150,11 +150,18 @@ public class PantallaJuego implements Screen {
 	      batch.end();
 	      //nivel completado
 	      if (balls1.size()==0) {
-			Screen ss = new PantallaJuego(game,ronda+1, nave.getVidas(), 
-					velXAsteroides+3, velYAsteroides+3, cantAsteroides+10);
-			ss.resize(1200, 800);
-			game.setScreen(ss);
-			dispose();
+	    	if (ronda>=5) {
+	    		Screen ss = new PantallaGameOver(game);
+	  			ss.resize(1200, 800);
+	  			game.setScreen(ss);
+	  			dispose();
+	    	}
+	    	else {  
+	    		Screen ss = new PantallaJuego(game,ronda+1, nave.getVidas());
+				ss.resize(1200, 800);
+				game.setScreen(ss);
+				dispose();
+	    	}
 		  }
 	    	 
 	}
