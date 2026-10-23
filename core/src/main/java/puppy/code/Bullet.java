@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
+import jefes.Jefe;
 
 public class Bullet {
 
@@ -40,6 +40,14 @@ public class Bullet {
 	            this.destroyed = true;
 	            return true;
 	
+	        }
+	        return false;
+	    }
+	    
+	    public boolean checkCollision(Jefe j) {
+	        if (spr.getBoundingRectangle().overlaps(j.getArea())) {
+	            this.destroyed = true;
+	            return true;
 	        }
 	        return false;
 	    }

@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import jefes.Jefe; 
+import jefes.jefeprueba;
+
 
 public class PantallaJuego implements Screen {
 
@@ -31,6 +34,7 @@ public class PantallaJuego implements Screen {
 	private  ArrayList<Ball2> balls2 = new ArrayList<>();
 	private  ArrayList<Bullet> balas = new ArrayList<>();
 
+	private Jefe jefe;
 
 	public PantallaJuego(SpaceNavigation game, int ronda, int vidas) {
 		this.game = game;
@@ -60,6 +64,10 @@ public class PantallaJuego implements Screen {
 	    				new Texture(Gdx.files.internal("Rocket2.png")), 
 	    				Gdx.audio.newSound(Gdx.files.internal("pop-sound.mp3"))); 
         nave.setVidas(vidas);
+        if (gestor.rondaJefe()) {
+            jefe = new jefeprueba(Gdx.graphics.getWidth()/2 - 64, Gdx.graphics.getHeight() - 150,
+                    new Texture(Gdx.files.internal("jefe1.png")));
+        }
         //crear asteroides
         Random r = new Random();
 	    for (int i = 0; i < cantAsteroides; i++) {
@@ -89,6 +97,9 @@ public class PantallaJuego implements Screen {
 	    	  for (int i = 0; i < balas.size(); i++) {
 		            Bullet b = balas.get(i);
 		            b.update();
+		            if (jefe != null && b.checkCollision(jefe)) {
+		                jefe.recibirDanio(1);
+		            }
 		            for (int j = 0; j < balls1.size(); j++) {    
 		              if (b.checkCollision(balls1.get(j))) {          
 		            	 explosionSound.play();
@@ -109,6 +120,9 @@ public class PantallaJuego implements Screen {
 		      for (Ball2 ball : balls1) {
 		          ball.update();
 		      }
+		      if (jefe != null) {
+		    	    jefe.actualizar(nave, this);
+		    	}
 		      //colisiones entre asteroides y sus rebotes  
 		      for (int i=0;i<balls1.size();i++) {
 		    	Ball2 ball1 = balls1.get(i);   
@@ -125,6 +139,9 @@ public class PantallaJuego implements Screen {
 	     for (Bullet b : balas) {       
 	          b.draw(batch);
 	      }
+	     if (jefe != null) {
+	    	    jefe.draw(batch);   // recorda revisar desppues
+	    	}
 	      nave.draw(batch, this);
 	      //dibujar asteroides y manejar colision con nave
 	      for (int i = 0; i < balls1.size(); i++) {
@@ -149,7 +166,9 @@ public class PantallaJuego implements Screen {
   		  }
 	      batch.end();
 	      //nivel completado
-	      if (balls1.size()==0) {
+	      boolean rondaTerminada = (jefe != null) ? jefe.estaDerrotado() : balls1.size() == 0;
+	      
+	      if (rondaTerminada) {
 	    	if (ronda>=5) {
 	    		Screen ss = new PantallaGameOver(game);
 	  			ss.resize(1200, 800);
