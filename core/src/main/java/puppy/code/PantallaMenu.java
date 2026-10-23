@@ -27,8 +27,9 @@ public class PantallaMenu implements Screen {
 		game.getBatch().setProjectionMatrix(camera.combined);
 
 		game.getBatch().begin();
-		game.getFont().draw(game.getBatch(), "Bienvenido a Space Navigation !", 140, 400);
-		game.getFont().draw(game.getBatch(), "Pincha en cualquier lado o presiona cualquier tecla para comenzar ...", 100, 300);
+		game.getFont().draw(game.getBatch(), "Space Navigation: El Viaje del Heroe", 100, 500);
+		game.getFont().draw(game.getBatch(), "Surca la galaxia para erradicar las fuerzas del mal 7w7.", 100, 430);
+		game.getFont().draw(game.getBatch(), "Haz clic o presiona cualquier tecla para comenzar...", 100, 320);
 	
 		game.getBatch().end();
 
