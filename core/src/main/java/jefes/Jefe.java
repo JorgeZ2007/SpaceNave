@@ -87,4 +87,7 @@ public abstract class Jefe {
     public void draw(SpriteBatch batch) {
         spr.draw(batch);
     }
+    public String getRutaMusica() {
+        return null;        // se pone null pa q use la musica de base
+    }
 }

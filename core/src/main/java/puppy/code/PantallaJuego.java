@@ -35,9 +35,9 @@ public class PantallaJuego implements Screen {
 	
 	private Nave4 nave;
 	private ArrayList<PowerUp> powerUps = new ArrayList<>();
-	private  ArrayList<Ball2> balls1 = new ArrayList<>();
-	private  ArrayList<Ball2> balls2 = new ArrayList<>();
-	private  ArrayList<Bullet> balas = new ArrayList<>();
+	private ArrayList<Ball2> balls1 = new ArrayList<>();
+	private ArrayList<Ball2> balls2 = new ArrayList<>();
+	private ArrayList<Bullet> balas = new ArrayList<>();
 	private ArrayList<Bullet> balasEnemigas = new ArrayList<>();
 
 	private Jefe jefe;
@@ -58,7 +58,22 @@ public class PantallaJuego implements Screen {
 		//inicializar assets; musica de fondo y efectos de sonido
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
 		explosionSound.setVolume(1,0.5f);
-		gameMusic = Gdx.audio.newMusic(Gdx.files.internal("piano-loops.wav")); //
+		
+		
+		if (gestor.rondaJefe()) {
+            jefe = new jefeprueba(Gdx.graphics.getWidth()/2 - 64, Gdx.graphics.getHeight() - 150,
+                    new Texture(Gdx.files.internal("jefe1.png")));
+        }
+		
+		//parte de la musica
+		
+		String ruta = "piano-loops.wav";
+		if (jefe != null && jefe.getRutaMusica() != null) {
+		    ruta = jefe.getRutaMusica();
+		}
+		gameMusic = Gdx.audio.newMusic(Gdx.files.internal(ruta));
+		
+		//System.out.println("jefe = " + jefe + " | ruta = " + ruta); pa probar si se activa bien la musica del jefe
 		
 		gameMusic.setLooping(true);
 		gameMusic.setVolume(0.5f);
@@ -70,10 +85,7 @@ public class PantallaJuego implements Screen {
 	    				new Texture(Gdx.files.internal("Rocket2.png")), 
 	    				Gdx.audio.newSound(Gdx.files.internal("pop-sound.mp3"))); 
         nave.setVidas(vidas);
-        if (gestor.rondaJefe()) {
-            jefe = new jefeprueba(Gdx.graphics.getWidth()/2 - 64, Gdx.graphics.getHeight() - 150,
-                    new Texture(Gdx.files.internal("jefe1.png")));
-        }
+        
         //crear asteroides
         Random r = new Random();
 	    for (int i = 0; i < cantAsteroides; i++) {
@@ -86,8 +98,8 @@ public class PantallaJuego implements Screen {
 	  	}
 	    
 	 // Instanciar Power-Ups en la pantalla usando el Patrón Strategy
-	    powerUps.add(new PowerUp(200, 300, new Texture(Gdx.files.internal("aGreySmall.png")), new PowerUpVida()));
-	    powerUps.add(new PowerUp(500, 400, new Texture(Gdx.files.internal("aGreySmall.png")), new PowerUpDanio()));
+	    powerUps.add(new PowerUp(200, 300, new Texture(Gdx.files.internal("imagenvidaextra.png")), new PowerUpVida()));
+	    powerUps.add(new PowerUp(500, 400, new Texture(Gdx.files.internal("imagendanioextra.png")), new PowerUpDanio()));
 	    
 	}
     

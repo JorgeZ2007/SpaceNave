@@ -88,5 +88,8 @@ public class jefeprueba extends Jefe {
             pantalla.agregarBalaEnemiga(new Bullet(x, y, vx, -4, txBala));
         }
     }
-    
+    @Override
+    public String getRutaMusica() {
+        return "jefepruebamusica.mp3";     
+    }
 }

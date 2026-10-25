@@ -11,13 +11,15 @@ public class PowerUp {
     private Rectangle bounds;
     private IEstrategiaPowerUp estrategia; // Patrón Strategy
     private boolean destruido = false;
-
+    private static final float ancho = 32;
+    private static final float alto = 32;
+    
     public PowerUp(float x, float y, Texture textura, IEstrategiaPowerUp estrategia) {
         this.x = x;
         this.y = y;
         this.textura = textura;
         this.estrategia = estrategia;
-        this.bounds = new Rectangle(x, y, textura.getWidth(), textura.getHeight());
+        this.bounds = new Rectangle(x, y, alto, ancho);
     }
 
     public void recolectar(Nave4 nave) {
