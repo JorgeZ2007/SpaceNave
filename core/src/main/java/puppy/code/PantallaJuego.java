@@ -65,7 +65,6 @@ public class PantallaJuego implements Screen {
                     new Texture(Gdx.files.internal("jefe1.png")));
         }
 		
-		//parte de la musica
 		
 		String ruta = "piano-loops.wav";
 		if (jefe != null && jefe.getRutaMusica() != null) {
@@ -121,7 +120,7 @@ public class PantallaJuego implements Screen {
 		            Bullet b = balas.get(i);
 		            b.update();
 		            if (jefe != null && b.checkCollision(jefe)) {
-		                jefe.recibirDanio(nave.getDanio()); // Cambiado de 1 fijo a nave.getDanio()
+		                jefe.recibirDanio(nave.getDanio()); 
 		            }
 		            for (int j = 0; j < balls1.size(); j++) {    
 		              if (b.checkCollision(balls1.get(j))) {          

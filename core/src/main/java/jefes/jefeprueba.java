@@ -18,7 +18,7 @@ public class jefeprueba extends Jefe {
 
 	private int velX = 3;   
     public jefeprueba(float x, float y, Texture tx) {
-        super(x, y, /* vidaMaxima */ 30, tx);
+        super(x, y, 90, tx);
     }
 
     @Override
