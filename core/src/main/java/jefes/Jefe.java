@@ -1,5 +1,6 @@
 package jefes;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,8 +16,8 @@ public abstract class Jefe {
     protected int vidaMaxima;
 
     // Contadores para los cooldowns (en frames)
-    private int contadorAtaque;
-    private int contadorEspecial;
+    private float contadorAtaque;
+    private float contadorEspecial;
 
     public Jefe(float x, float y, int vidaMaxima, Texture tx) {
     	spr = new Sprite(tx);
@@ -28,13 +29,18 @@ public abstract class Jefe {
 
     // ===== MÉTODO PLANTILLA =====
     public final void actualizar(Nave4 nave, PantallaJuego pantalla) {
+    	float delta = Gdx.graphics.getDeltaTime();
+        contadorAtaque += delta;
+        contadorEspecial += delta;
+        
+        mover();
         mover();
         if (puedeUsarEspecial()) {
             ataqueEspecial(nave, pantalla);
-            reiniciarCargaEspecial();
+            contadorEspecial = 0;
         } else if (puedeAtacar()) {
             atacar(nave, pantalla);
-            // TODO: reiniciar el contador del ataque básico
+            contadorAtaque = 0;
         }
         actualizarFase();
         // TODO: avanzar los contadores
@@ -46,14 +52,16 @@ public abstract class Jefe {
     protected abstract void ataqueEspecial(Nave4 nave, PantallaJuego pantalla);
 
     // ===== HOOKS (comportamiento por defecto, se pueden sobreescribir) =====
+    
+    protected float getCooldownAtaque()   { return 1.5f; }
+    protected float getCooldownEspecial() { return 10f; }
+    
     protected boolean puedeAtacar() {
-        // TODO: true si el contador llegó a su cooldown
-        return false;
+    	return contadorAtaque >= getCooldownAtaque();
     }
 
     protected boolean puedeUsarEspecial() {
-        //igual, pero con un cooldown más largo
-        return false;
+    	return contadorEspecial >= getCooldownEspecial();
     }
 
     protected void actualizarFase() { }
@@ -65,7 +73,7 @@ public abstract class Jefe {
 
     public void recibirDanio(int danio) {
     	vida -= danio;
-        if (vida < 0) vida = 0;   // que no baje de 0
+        if (vida < 0) vida = 0;   
     }
 
     public boolean estaDerrotado() {

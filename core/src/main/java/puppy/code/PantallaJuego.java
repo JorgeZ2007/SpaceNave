@@ -33,6 +33,7 @@ public class PantallaJuego implements Screen {
 	private  ArrayList<Ball2> balls1 = new ArrayList<>();
 	private  ArrayList<Ball2> balls2 = new ArrayList<>();
 	private  ArrayList<Bullet> balas = new ArrayList<>();
+	private ArrayList<Bullet> balasEnemigas = new ArrayList<>();
 
 	private Jefe jefe;
 
@@ -123,6 +124,18 @@ public class PantallaJuego implements Screen {
 		      if (jefe != null) {
 		    	    jefe.actualizar(nave, this);
 		    	}
+		      for (int i = 0; i < balasEnemigas.size(); i++) {
+		    	    Bullet b = balasEnemigas.get(i);
+		    	    b.update();
+		    	    if (nave.checkCollision(b.getArea())) {
+		    	        b.destruir();
+		    	    }
+		    	    if (b.isDestroyed()) {
+		    	        balasEnemigas.remove(i);
+		    	        i--;
+		    	    }
+		    	}
+		      
 		      //colisiones entre asteroides y sus rebotes  
 		      for (int i=0;i<balls1.size();i++) {
 		    	Ball2 ball1 = balls1.get(i);   
@@ -139,6 +152,9 @@ public class PantallaJuego implements Screen {
 	     for (Bullet b : balas) {       
 	          b.draw(batch);
 	      }
+	     for (Bullet b : balasEnemigas) {
+	    	    b.draw(batch);
+	    	}
 	     if (jefe != null) {
 	    	    jefe.draw(batch);   // recorda revisar desppues
 	    	}
@@ -187,6 +203,9 @@ public class PantallaJuego implements Screen {
     
     public boolean agregarBala(Bullet bb) {
     	return balas.add(bb);
+    }
+    public void agregarBalaEnemiga(Bullet b) {
+        balasEnemigas.add(b);
     }
 	
 	@Override

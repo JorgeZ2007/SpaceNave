@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 
 
 
@@ -23,6 +24,7 @@ public class Nave4 {
     private boolean herido = false;
     private int tiempoHeridoMax=50;
     private int tiempoHerido;
+    
     
     public Nave4(int x, int y, Texture tx, Sound soundChoque, Texture txBala, Sound soundBala) {
     	sonidoHerido = soundChoque;
@@ -101,15 +103,27 @@ public class Nave4 {
                spr.setX(spr.getX()+Math.signum(xVel));
             }   */
         	//actualizar vidas y herir
-            vidas--;
-            herido = true;
-  		    tiempoHerido=tiempoHeridoMax;
-  		    sonidoHerido.play();
-            if (vidas<=0) 
-          	    destruida = true; 
+            recibirGolpe();
             return true;
         }
         return false;
+    }
+    
+    public boolean checkCollision(Rectangle area) {
+        if (!herido && area.overlaps(spr.getBoundingRectangle())) {
+            recibirGolpe();
+            return true;
+        }
+        return false;
+    }
+    
+    private void recibirGolpe() {
+        vidas--;
+        herido = true;
+        tiempoHerido = tiempoHeridoMax;
+        sonidoHerido.play();
+        if (vidas <= 0)
+            destruida = true;
     }
     
     public boolean estaDestruido() {

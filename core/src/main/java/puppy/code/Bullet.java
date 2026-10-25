@@ -4,16 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import jefes.Jefe;
 
 public class Bullet {
 
-	private int xSpeed;
-	private int ySpeed;
+	private float xSpeed;
+	private float ySpeed;
 	private boolean destroyed = false;
 	private Sprite spr;
 	    
-	    public Bullet(float x, float y, int xSpeed, int ySpeed, Texture tx) {
+	    public Bullet(float x, float y, float xSpeed, float ySpeed, Texture tx) {
 	    	spr = new Sprite(tx);
 	    	spr.setPosition(x, y);
 	        this.xSpeed = xSpeed;
@@ -53,5 +54,13 @@ public class Bullet {
 	    }
 	    
 	    public boolean isDestroyed() {return destroyed;}
+	    
+	    public Rectangle getArea() {
+	        return spr.getBoundingRectangle();
+	    }
+
+	    public void destruir() {
+	        destroyed = true;
+	    }
 	
 }
