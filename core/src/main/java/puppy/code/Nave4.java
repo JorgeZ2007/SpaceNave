@@ -16,6 +16,7 @@ public class Nave4 {
 	private boolean destruida = false;
     private int vidas = 3;
     private float xVel = 0;
+    private int danio = 1; // Daño base inicial de los disparos de la nave
     private float yVel = 0;
     private Sprite spr;
     private Sound sonidoHerido;
@@ -138,4 +139,12 @@ public class Nave4 {
     public int getX() {return (int) spr.getX();}
     public int getY() {return (int) spr.getY();}
 	public void setVidas(int vidas2) {vidas = vidas2;}
+	
+	public int getDanio() { 
+	    return danio; 
+	}
+
+	public void setDanio(int danio) { 
+	    this.danio = danio; 
+	}
 }

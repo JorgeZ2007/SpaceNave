@@ -15,6 +15,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import jefes.Jefe; 
 import jefes.jefeprueba;
 
+import powerUps.PowerUp;
+import powerUps.PowerUpDanio;
+import powerUps.PowerUpVida;
+
 
 public class PantallaJuego implements Screen {
 
@@ -30,6 +34,7 @@ public class PantallaJuego implements Screen {
 	private int cantAsteroides;
 	
 	private Nave4 nave;
+	private ArrayList<PowerUp> powerUps = new ArrayList<>();
 	private  ArrayList<Ball2> balls1 = new ArrayList<>();
 	private  ArrayList<Ball2> balls2 = new ArrayList<>();
 	private  ArrayList<Bullet> balas = new ArrayList<>();
@@ -79,6 +84,11 @@ public class PantallaJuego implements Screen {
 	  	    balls1.add(bb);
 	  	    balls2.add(bb);
 	  	}
+	    
+	 // Instanciar Power-Ups en la pantalla usando el Patrón Strategy
+	    powerUps.add(new PowerUp(200, 300, new Texture(Gdx.files.internal("aGreySmall.png")), new PowerUpVida()));
+	    powerUps.add(new PowerUp(500, 400, new Texture(Gdx.files.internal("aGreySmall.png")), new PowerUpDanio()));
+	    
 	}
     
 	public void dibujaEncabezado() {
@@ -99,7 +109,7 @@ public class PantallaJuego implements Screen {
 		            Bullet b = balas.get(i);
 		            b.update();
 		            if (jefe != null && b.checkCollision(jefe)) {
-		                jefe.recibirDanio(1);
+		                jefe.recibirDanio(nave.getDanio()); // Cambiado de 1 fijo a nave.getDanio()
 		            }
 		            for (int j = 0; j < balls1.size(); j++) {    
 		              if (b.checkCollision(balls1.get(j))) {          
@@ -148,6 +158,18 @@ public class PantallaJuego implements Screen {
 		        }
 		      } 
 	      }
+	      
+	   // Dibujar y gestionar colisiones de Power-Ups
+	      for (int i = 0; i < powerUps.size(); i++) {
+	          PowerUp p = powerUps.get(i);
+	          p.draw(batch);
+	          if (p.checkCollision(nave)) {
+	              p.recolectar(nave); // Ejecuta la estrategia correspondiente (vida o daño)
+	              powerUps.remove(i);
+	              i--;
+	          }
+	      }
+	      
 	      //dibujar balas
 	     for (Bullet b : balas) {       
 	          b.draw(batch);
