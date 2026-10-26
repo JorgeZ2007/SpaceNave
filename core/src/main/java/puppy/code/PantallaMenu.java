@@ -27,7 +27,7 @@ public class PantallaMenu implements Screen {
 		game.getBatch().setProjectionMatrix(camera.combined);
 
 		game.getBatch().begin();
-		game.getFont().draw(game.getBatch(), "Odisea espacial: El Viaje del Heroe", 100, 500);
+		game.getFont().draw(game.getBatch(), "Space Navigation: El Viaje del Heroe", 100, 500);
 		game.getFont().draw(game.getBatch(), "Surca la galaxia para erradicar las fuerzas del mal 7w7.", 100, 430);
 		game.getFont().draw(game.getBatch(), "Haz clic o presiona cualquier tecla para comenzar...", 100, 320);
 	

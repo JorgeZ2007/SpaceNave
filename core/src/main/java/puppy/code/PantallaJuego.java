@@ -66,7 +66,7 @@ public class PantallaJuego implements Screen {
         }
 		
 		
-		String ruta = "piano-loops.wav";
+		String ruta = "piano-loops.ogg";
 		if (jefe != null && jefe.getRutaMusica() != null) {
 		    ruta = jefe.getRutaMusica();
 		}
