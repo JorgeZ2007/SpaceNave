@@ -31,3 +31,13 @@ Useful Gradle tasks and flags:
 
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
+
+
+
+
+
+==============================
+#COMO EJECUTAR EL JUEGO
+==============================
+
+En la parte de SpaceNav2024-lwjgl3, en la carpeta de src/main/java dentro del paquete "io.github.spacenav.lwjgl3", haga clic derecho sobre la clase Lwjgl3Launcher.java y elija la opcion "Run as" y escoja "Java application" y listo!!!! ya puede jugar nuestro juego
