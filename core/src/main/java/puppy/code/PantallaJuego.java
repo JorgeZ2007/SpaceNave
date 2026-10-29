@@ -1,6 +1,7 @@
 package puppy.code;
 
 import java.util.ArrayList;
+
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
@@ -11,6 +12,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Color;
 
 import jefes.Jefe; 
 import jefes.jefeprueba;
@@ -41,6 +44,20 @@ public class PantallaJuego implements Screen {
 	private ArrayList<Bullet> balasEnemigas = new ArrayList<>();
 
 	private Jefe jefe;
+	
+	private boolean habilidadActiva ;
+	private float radioOnda=0 ;
+	private float radioMax=300 ;
+	private float velOnda=300 ;
+	private float ondaX, ondaY ;
+	private ShapeRenderer shapeRenderer ;
+	
+	public void activarHabilidad(float x, float y) {
+		habilidadActiva=true ;
+		radioOnda=0 ;
+		ondaX=x ;
+		ondaY=y ;
+	}
 
 	public PantallaJuego(SpaceNavigation game, int ronda, int vidas) {
 		this.game = game;
@@ -52,6 +69,7 @@ public class PantallaJuego implements Screen {
 		this.velYAsteroides = gestor.gestionarVelocidadEnemigos() ;
 		this.cantAsteroides = gestor.generarEnemigos() ;
 		
+		shapeRenderer=new ShapeRenderer() ;
 		batch = game.getBatch();
 		camera = new OrthographicCamera();	
 		camera.setToOrtho(false, 800, 640);
@@ -112,6 +130,12 @@ public class PantallaJuego implements Screen {
 	@Override
 	public void render(float delta) {
 		  Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		  
+		  // Para usar la ulti con la tecla 'z'
+		  if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.Z)) {
+			  nave.dispararUlti(this) ;
+		  }
+		  
           batch.begin();
 		  dibujaEncabezado();
 	      if (!nave.estaHerido()) {
@@ -129,6 +153,7 @@ public class PantallaJuego implements Screen {
 		            	 balls2.remove(j);
 		            	 j--;
 		            	 GestorPuntaje.getInstancia().derrotarEnemigo();
+		            	 nave.cargarUlti(25) ;
 		              }   	  
 		  	        }
 		                
@@ -214,9 +239,50 @@ public class PantallaJuego implements Screen {
   			dispose();
   		  }
 	      batch.end();
+	      
+	   // Habilidad definitiva
+	      if (habilidadActiva) {
+	    	  radioOnda+=velOnda*delta ;
+	    	  
+	    	  for (int i=0; i<balls1.size(); i++) {
+	    		  Ball2 b=balls1.get(i) ;
+	    		  float distancia= (float) Math.hypot(b.getX()-ondaX, b.getY()-ondaY) ;
+	    		  
+	    		  if (distancia<=radioOnda) {
+	    			  balls1.remove(i) ;
+	    			  balls2.remove(i) ;
+	    			  i-- ;
+	    			  GestorPuntaje.getInstancia().derrotarEnemigo() ;
+ 	    		  }
+	    	  }
+	    	  if (radioOnda>=radioMax) {
+	    		  habilidadActiva=false ;
+	    	  }
+	    	  
+	    	  shapeRenderer.setProjectionMatrix(camera.combined) ;
+	    	  shapeRenderer.begin(ShapeRenderer.ShapeType.Line) ;
+	    	  shapeRenderer.setColor(Color.CYAN) ;
+	    	  shapeRenderer.circle(ondaX, ondaY, radioOnda) ;
+	    	  shapeRenderer.end() ;   	  
+	      }
+	      
+	      
+	      shapeRenderer.setProjectionMatrix(camera.combined) ;
+    	  shapeRenderer.begin(ShapeRenderer.ShapeType.Filled) ;
+    	  shapeRenderer.setColor(Color.DARK_GRAY) ;
+    	  shapeRenderer.rect(50, 50, 200, 15) ;
+    	  
+    	  float progreso=nave.getCargaHabilidad() ;
+    	  float ancho=(progreso/100f)*200 ;
+    	  
+    	  shapeRenderer.setColor(Color.PINK) ;
+    	  shapeRenderer.rect(50, 50, ancho, 15) ;
+    	  shapeRenderer.end() ;
+	      
+	      
 	      //nivel completado
 	      boolean rondaTerminada = (jefe != null) ? jefe.estaDerrotado() : balls1.size() == 0;
-	      
+	      nave.desbloquearUlti(ronda) ;
 	      if (rondaTerminada) {
 	    	if (ronda>=5) {
 	    		Screen ss = new PantallaGameOver(game);
@@ -231,6 +297,7 @@ public class PantallaJuego implements Screen {
 				dispose();
 	    	}
 		  }
+	      
 	    	 
 	}
     
@@ -276,6 +343,7 @@ public class PantallaJuego implements Screen {
 		// TODO Auto-generated method stub
 		this.explosionSound.dispose();
 		this.gameMusic.dispose();
+		shapeRenderer.dispose() ;
 	}
    
 }

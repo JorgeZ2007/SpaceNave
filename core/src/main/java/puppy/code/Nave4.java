@@ -25,6 +25,8 @@ public class Nave4 {
     private boolean herido = false;
     private int tiempoHeridoMax=50;
     private int tiempoHerido;
+    private HabilidadDefinitiva ulti ;
+    private boolean ultiDesbloqueada ;
     
     
     public Nave4(int x, int y, Texture tx, Sound soundChoque, Texture txBala, Sound soundBala) {
@@ -35,6 +37,9 @@ public class Nave4 {
     	spr.setPosition(x, y);
     	//spr.setOriginCenter();
     	spr.setBounds(x, y, 45, 45);
+    	
+    	ulti=new OndaExpansiva() ;
+    	ultiDesbloqueada=false ;
 
     }
     public void draw(SpriteBatch batch, PantallaJuego juego){
@@ -147,4 +152,33 @@ public class Nave4 {
 	public void setDanio(int danio) { 
 	    this.danio = danio; 
 	}
+	
+	// Habilidad definitiva:
+	
+	public void desbloquearUlti(int ronda) {
+		if (ronda>2) {
+			ultiDesbloqueada=true ;
+		}
+	}
+	
+	public void cargarUlti(int cantidad) {
+		if (ultiDesbloqueada) {
+			ulti.cargar(cantidad) ;
+		}
+	}
+	
+	public void dispararUlti(PantallaJuego pantalla) {
+		if (!ultiDesbloqueada) return ;
+		if (ulti.habilidadCargada()) {
+			ulti.usarHabilidad(this, pantalla);
+		}
+	}
+	
+	public int getCargaHabilidad() {
+		return ulti.getProgresoCarga() ;
+	}
+	
+	
+	
+	
 }
