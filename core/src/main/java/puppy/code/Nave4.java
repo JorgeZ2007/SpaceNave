@@ -78,15 +78,7 @@ public class Nave4 {
 	        	yVel*=-1;
 	        
 	        spr.setPosition(x+xVel, y+yVel);   
-	        if (xVel != 0 || yVel != 0) {
-	            if (Math.abs(xVel) > Math.abs(yVel)) {
-	                dirDisparoX = Math.signum(xVel);   // 1 = derecha, -1 = izquierda
-	                dirDisparoY = 0;
-	            } else {
-	                dirDisparoX = 0;
-	                dirDisparoY = Math.signum(yVel);   // 1 = arriba, -1 = abajo
-	            }
-	        }
+	        
          
  		    spr.draw(batch);
         } else {
