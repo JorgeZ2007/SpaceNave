@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.MathUtils;
 import jefes.Jefe;
 
 public class Bullet {
@@ -17,6 +18,9 @@ public class Bullet {
 	    public Bullet(float x, float y, float xSpeed, float ySpeed, Texture tx) {
 	    	spr = new Sprite(tx);
 	    	spr.setPosition(x, y);
+	    	if (xSpeed != 0 || ySpeed != 0) {
+	    	    spr.setRotation(MathUtils.atan2(ySpeed, xSpeed) * MathUtils.radiansToDegrees - 90);
+	    	}
 	        this.xSpeed = xSpeed;
 	        this.ySpeed = ySpeed;
 	    }

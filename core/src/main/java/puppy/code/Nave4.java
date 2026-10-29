@@ -18,6 +18,8 @@ public class Nave4 {
     private float xVel = 0;
     private int danio = 1; // Daño base inicial de los disparos de la nave
     private float yVel = 0;
+    private float dirDisparoX = 0;
+    private float dirDisparoY = 1;  
     private Sprite spr;
     private Sound sonidoHerido;
     private Sound soundBala;
@@ -35,22 +37,25 @@ public class Nave4 {
     	this.txBala = txBala;
     	spr = new Sprite(tx);
     	spr.setPosition(x, y);
-    	//spr.setOriginCenter();
     	spr.setBounds(x, y, 45, 45);
     	
     	ulti=new OndaExpansiva() ;
     	ultiDesbloqueada=false ;
+    	
+    	spr.setOriginCenter();
+    	
 
     }
     public void draw(SpriteBatch batch, PantallaJuego juego){
+    	
         float x =  spr.getX();
         float y =  spr.getY();
         if (!herido) {
 	        // que se mueva con teclado
-	        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) xVel--;
-	        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) xVel++;
-        	if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) yVel--;     
-	        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) yVel++;
+        	if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT))  { xVel--; mirarHacia(-1, 0); }
+        	if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) { xVel++; mirarHacia(1, 0); }
+        	if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN))  { yVel--; mirarHacia(0, -1); }
+        	if (Gdx.input.isKeyJustPressed(Input.Keys.UP))    { yVel++; mirarHacia(0, 1); }
         	
 	     /*   if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) spr.setRotation(++rotacion);
 	        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) spr.setRotation(--rotacion);
@@ -73,6 +78,15 @@ public class Nave4 {
 	        	yVel*=-1;
 	        
 	        spr.setPosition(x+xVel, y+yVel);   
+	        if (xVel != 0 || yVel != 0) {
+	            if (Math.abs(xVel) > Math.abs(yVel)) {
+	                dirDisparoX = Math.signum(xVel);   // 1 = derecha, -1 = izquierda
+	                dirDisparoY = 0;
+	            } else {
+	                dirDisparoX = 0;
+	                dirDisparoY = Math.signum(yVel);   // 1 = arriba, -1 = abajo
+	            }
+	        }
          
  		    spr.draw(batch);
         } else {
@@ -84,9 +98,14 @@ public class Nave4 {
  		 }
         // disparo
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {         
-          Bullet  bala = new Bullet(spr.getX()+spr.getWidth()/2-5,spr.getY()+ spr.getHeight()-5,0,3,txBala);
-	      juego.agregarBala(bala);
-	      soundBala.play();
+        	float vel = 3;                                    
+            float cx = spr.getX() + spr.getWidth() / 2;
+            float cy = spr.getY() + spr.getHeight() / 2;
+            Bullet bala = new Bullet(cx - 5 + dirDisparoX * spr.getWidth() / 2,
+                                     cy - 5 + dirDisparoY * spr.getHeight() / 2,
+                                     dirDisparoX * vel, dirDisparoY * vel, txBala);
+            juego.agregarBala(bala);
+            soundBala.play();
         }
        
     }
@@ -179,6 +198,9 @@ public class Nave4 {
 	}
 	
 	
-	
-	
+	public void mirarHacia(float dx, float dy) {
+	    dirDisparoX = dx;
+	    dirDisparoY = dy;
+	    spr.setRotation(MathUtils.atan2(dy, dx) * MathUtils.radiansToDegrees - 90);
+	}
 }
