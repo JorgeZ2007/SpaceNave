@@ -14,6 +14,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
+import enemigos.EnemigoBase;
+import enemigos.EnemigoPerseguidor;
 
 import jefes.Jefe; 
 import jefes.jefeprueba;
@@ -42,6 +44,7 @@ public class PantallaJuego implements Screen {
 	private ArrayList<Ball2> balls2 = new ArrayList<>();
 	private ArrayList<Bullet> balas = new ArrayList<>();
 	private ArrayList<Bullet> balasEnemigas = new ArrayList<>();
+	private ArrayList<EnemigoBase> enemigos = new ArrayList<>();
 
 	private Jefe jefe;
 	
@@ -113,6 +116,13 @@ public class PantallaJuego implements Screen {
 	  	    balls1.add(bb);
 	  	    balls2.add(bb);
 	  	}
+	    if (ronda >= 2) {
+	        for (int i = 0; i < 3; i++) {
+	            enemigos.add(new EnemigoPerseguidor(r.nextInt(Gdx.graphics.getWidth()),
+	                    Gdx.graphics.getHeight() - 100,
+	                    new Texture(Gdx.files.internal("aGreyLarge.png"))));   // imagen provisoria
+	        }
+	    }
 	    
 	 // Instanciar Power-Ups en la pantalla usando el Patrón Strategy
 	    powerUps.add(new PowerUp(200, 300, new Texture(Gdx.files.internal("imagenvidaextra.png")), new PowerUpVida()));
@@ -156,6 +166,19 @@ public class PantallaJuego implements Screen {
 		            	 nave.cargarUlti(25) ;
 		              }   	  
 		  	        }
+		            for (int j = 0; j < enemigos.size(); j++) {
+		                EnemigoBase e = enemigos.get(j);
+		                if (b.checkCollision(e)) {
+		                    e.recibirDanio(nave.getDanio());
+		                    if (e.estaDestruido()) {
+		                        explosionSound.play();
+		                        enemigos.remove(j);
+		                        j--;
+		                        GestorPuntaje.getInstancia().derrotarEnemigo();
+		                        nave.cargarUlti(25);
+		                    }
+		                }
+		            }
 		                
 		         //   b.draw(batch);
 		            if (b.isDestroyed()) {
@@ -166,6 +189,9 @@ public class PantallaJuego implements Screen {
 		      //actualizar movimiento de asteroides dentro del area
 		      for (Ball2 ball : balls1) {
 		          ball.update();
+		      }
+		      for (EnemigoBase e : enemigos) {
+		    	    e.update(nave);
 		      }
 		      if (jefe != null) {
 		    	    jefe.actualizar(nave, this);
@@ -229,6 +255,14 @@ public class PantallaJuego implements Screen {
 	            	 i--;
               }   	  
   	        }
+	      for (int i = 0; i < enemigos.size(); i++) {
+	    	    EnemigoBase e = enemigos.get(i);
+	    	    e.draw(batch);
+	    	    if (nave.checkCollision(e.getArea())) {
+	    	        enemigos.remove(i);      
+	    	        i--;
+	    	    }
+	    	}
 	      
 	      if (nave.estaDestruido()) {
   			if (GestorPuntaje.getInstancia().getPuntaje() > game.getHighScore())
@@ -281,7 +315,8 @@ public class PantallaJuego implements Screen {
 	      
 	      
 	      //nivel completado
-	      boolean rondaTerminada = (jefe != null) ? jefe.estaDerrotado() : balls1.size() == 0;
+    	  boolean rondaTerminada = (jefe != null) ? jefe.estaDerrotado()
+                  : (balls1.isEmpty() && enemigos.isEmpty());
 	      nave.desbloquearUlti(ronda) ;
 	      if (rondaTerminada) {
 	    	if (ronda>=5) {

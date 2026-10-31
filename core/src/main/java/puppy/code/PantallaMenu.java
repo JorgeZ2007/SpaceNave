@@ -35,7 +35,7 @@ public class PantallaMenu implements Screen {
 
 		if (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
 			// cambiar la cantidad de vidas cuando se deban probar cositirijillas
-			Screen ss = new PantallaJuego(game,1,5);
+			Screen ss = new PantallaJuego(game,1,50);
 			ss.resize(1200, 800);
 			game.setScreen(ss);
 			dispose();

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.MathUtils;
+import enemigos.EnemigoBase;
 import jefes.Jefe;
 
 public class Bullet {
@@ -65,6 +66,13 @@ public class Bullet {
 
 	    public void destruir() {
 	        destroyed = true;
+	    }
+	    public boolean checkCollision(EnemigoBase e) {
+	        if (spr.getBoundingRectangle().overlaps(e.getArea())) {
+	            this.destroyed = true;
+	            return true;
+	        }
+	        return false;
 	    }
 	
 }
