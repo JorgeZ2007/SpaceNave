@@ -48,19 +48,8 @@ public class PantallaJuego implements Screen {
 
 	private Jefe jefe;
 	
-	private boolean habilidadActiva ;
-	private float radioOnda=0 ;
-	private float radioMax=300 ;
-	private float velOnda=300 ;
-	private float ondaX, ondaY ;
 	private ShapeRenderer shapeRenderer ;
 	
-	public void activarHabilidad(float x, float y) {
-		habilidadActiva=true ;
-		radioOnda=0 ;
-		ondaX=x ;
-		ondaY=y ;
-	}
 
 	public PantallaJuego(SpaceNavigation game, int ronda, int vidas) {
 		this.game = game;
@@ -143,7 +132,7 @@ public class PantallaJuego implements Screen {
 		  
 		  // Para usar la ulti con la tecla 'z'
 		  if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.Z)) {
-			  nave.dispararUlti(this) ;
+			  nave.dispararUlti() ;
 		  }
 		  
           batch.begin();
@@ -175,7 +164,7 @@ public class PantallaJuego implements Screen {
 		                        enemigos.remove(j);
 		                        j--;
 		                        GestorPuntaje.getInstancia().derrotarEnemigo();
-		                        nave.cargarUlti(25);
+		                        nave.cargarUlti(50);
 		                    }
 		                }
 		            }
@@ -274,44 +263,8 @@ public class PantallaJuego implements Screen {
   		  }
 	      batch.end();
 	      
-	   // Habilidad definitiva
-	      if (habilidadActiva) {
-	    	  radioOnda+=velOnda*delta ;
-	    	  
-	    	  for (int i=0; i<balls1.size(); i++) {
-	    		  Ball2 b=balls1.get(i) ;
-	    		  float distancia= (float) Math.hypot(b.getX()-ondaX, b.getY()-ondaY) ;
-	    		  
-	    		  if (distancia<=radioOnda) {
-	    			  balls1.remove(i) ;
-	    			  balls2.remove(i) ;
-	    			  i-- ;
-	    			  GestorPuntaje.getInstancia().derrotarEnemigo() ;
- 	    		  }
-	    	  }
-	    	  if (radioOnda>=radioMax) {
-	    		  habilidadActiva=false ;
-	    	  }
-	    	  
-	    	  shapeRenderer.setProjectionMatrix(camera.combined) ;
-	    	  shapeRenderer.begin(ShapeRenderer.ShapeType.Line) ;
-	    	  shapeRenderer.setColor(Color.CYAN) ;
-	    	  shapeRenderer.circle(ondaX, ondaY, radioOnda) ;
-	    	  shapeRenderer.end() ;   	  
-	      }
-	      
-	      
-	      shapeRenderer.setProjectionMatrix(camera.combined) ;
-    	  shapeRenderer.begin(ShapeRenderer.ShapeType.Filled) ;
-    	  shapeRenderer.setColor(Color.DARK_GRAY) ;
-    	  shapeRenderer.rect(50, 50, 200, 15) ;
-    	  
-    	  float progreso=nave.getCargaHabilidad() ;
-    	  float ancho=(progreso/100f)*200 ;
-    	  
-    	  shapeRenderer.setColor(Color.PINK) ;
-    	  shapeRenderer.rect(50, 50, ancho, 15) ;
-    	  shapeRenderer.end() ;
+	   // Habilidad definitiva onda expansiva
+	      nave.generarOnda(delta, balls1, balls2, shapeRenderer, camera, nave) ;
 	      
 	      
 	      //nivel completado
