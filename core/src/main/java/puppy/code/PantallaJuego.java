@@ -25,11 +25,16 @@ import powerUps.PowerUp;
 import powerUps.PowerUpDanio;
 import powerUps.PowerUpVida;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+
 
 public class PantallaJuego implements Screen {
 
 	private SpaceNavigation game;
-	private OrthographicCamera camera;	
+	private OrthographicCamera camera;
+	private Viewport viewport; 
 	private SpriteBatch batch;
 	private Sound explosionSound;
 	private Music gameMusic;
@@ -48,6 +53,7 @@ public class PantallaJuego implements Screen {
 	private ArrayList<EnemigoBase> enemigos = new ArrayList<>();
 
 	private Jefe jefe;
+	private Texture txFondo;
 	
 	private ShapeRenderer shapeRenderer ;
 	
@@ -64,8 +70,9 @@ public class PantallaJuego implements Screen {
 		
 		shapeRenderer=new ShapeRenderer() ;
 		batch = game.getBatch();
-		camera = new OrthographicCamera();	
-		camera.setToOrtho(false, 800, 640);
+		camera = new OrthographicCamera();
+		viewport = new FitViewport(800, 600, camera); 
+		//camera.setToOrtho(false, 1000, 640);
 		//inicializar assets; musica de fondo y efectos de sonido
 		explosionSound = Gdx.audio.newSound(Gdx.files.internal("explosion.ogg"));
 		explosionSound.setVolume(1,0.5f);
@@ -119,6 +126,9 @@ public class PantallaJuego implements Screen {
 	                new Texture(Gdx.files.internal("aGreyLarge.png")),    // imagen provisoria
 	                new Texture(Gdx.files.internal("Rocket2.png"))));      // bala
 	    }
+	    
+	    // Nuevo fondo
+	    txFondo = new Texture(Gdx.files.internal("fondoGame.jpeg"));
 	 // Instanciar Power-Ups en la pantalla usando el Patrón Strategy
 	    powerUps.add(new PowerUp(200, 300, new Texture(Gdx.files.internal("imagenvidaextra.png")), new PowerUpVida()));
 	    powerUps.add(new PowerUp(500, 400, new Texture(Gdx.files.internal("imagendanioextra.png")), new PowerUpDanio()));
@@ -129,8 +139,8 @@ public class PantallaJuego implements Screen {
 		CharSequence str = "Vidas: "+nave.getVidas()+" Ronda: "+ronda;
 		game.getFont().getData().setScale(2f);		
 		game.getFont().draw(batch, str, 10, 30);
-		game.getFont().draw(batch, "Score:"+GestorPuntaje.getInstancia().getPuntaje(), Gdx.graphics.getWidth()-150, 30);
-		game.getFont().draw(batch, "HighScore:"+game.getHighScore(), Gdx.graphics.getWidth()/2-100, 30);
+		game.getFont().draw(batch, "Score:"+GestorPuntaje.getInstancia().getPuntaje(), Gdx.graphics.getWidth()-20, Gdx.graphics.getHeight()-30);
+		game.getFont().draw(batch, "HighScore:"+game.getHighScore(), Gdx.graphics.getWidth()-20, Gdx.graphics.getHeight()-70);
 	}
 	@Override
 	public void render(float delta) {
@@ -141,7 +151,10 @@ public class PantallaJuego implements Screen {
 			  nave.dispararUlti() ;
 		  }
 		  
+		  camera.update();
+		  batch.setProjectionMatrix(camera.combined);
           batch.begin();
+          batch.draw(txFondo, 0, 0, 800, 640);
 		  dibujaEncabezado();
 	      if (!nave.estaHerido()) {
 		      // colisiones entre balas y asteroides y su destruccion  
@@ -311,7 +324,7 @@ public class PantallaJuego implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+		viewport.update(width, height, true);
 	}
 
 	@Override
@@ -338,6 +351,8 @@ public class PantallaJuego implements Screen {
 		this.explosionSound.dispose();
 		this.gameMusic.dispose();
 		shapeRenderer.dispose() ;
+		
+		this.txFondo.dispose();
 	}
    
 }

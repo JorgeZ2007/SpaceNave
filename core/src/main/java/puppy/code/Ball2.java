@@ -13,6 +13,8 @@ public class Ball2 {
     private int xSpeed;
     private int ySpeed;
     private Sprite spr;
+    private float limiteX = 800; 
+    private float limiteY = 600;
 
     public Ball2(int x, int y, int size, int xSpeed, int ySpeed, Texture tx) {
     	spr = new Sprite(tx);
@@ -35,10 +37,25 @@ public class Ball2 {
         x += getXSpeed();
         y += getySpeed();
 
-        if (x+getXSpeed() < 0 || x+getXSpeed()+spr.getWidth() > Gdx.graphics.getWidth())
+        /*if (x+getXSpeed() < 0 || x+getXSpeed()+spr.getWidth() > Gdx.graphics.getWidth())
         	setXSpeed(getXSpeed() * -1);
         if (y+getySpeed() < 0 || y+getySpeed()+spr.getHeight() > Gdx.graphics.getHeight())
-        	setySpeed(getySpeed() * -1);
+        	setySpeed(getySpeed() * -1);*/
+        
+        if (x < 0) {
+            x = 0; 
+            setXSpeed(getXSpeed() * -1);
+        } else if (x + spr.getWidth() > limiteX) {
+            x = (int)(limiteX - spr.getWidth()); 
+            setXSpeed(getXSpeed() * -1);
+        }
+        if (y < 0) {
+            y = 0; 
+            setySpeed(getySpeed() * -1);
+        } else if (y + spr.getHeight() > limiteY) {
+            y = (int) (limiteY - spr.getHeight()); 
+            setySpeed(getySpeed() * -1);
+        }
         spr.setPosition(x, y);
     }
     
