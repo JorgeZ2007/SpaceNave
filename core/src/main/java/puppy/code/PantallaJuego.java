@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import enemigos.EnemigoBase;
 import enemigos.EnemigoPerseguidor;
+import enemigos.enemigofranco;
 
 import jefes.Jefe; 
 import jefes.jefeprueba;
@@ -123,7 +124,12 @@ public class PantallaJuego implements Screen {
 	                    new Texture(Gdx.files.internal("aGreyLarge.png"))));   // imagen provisoria
 	        }
 	    }
-	    
+	    if (ronda >= 3) {
+	        enemigos.add(new enemigofranco(r.nextInt(Gdx.graphics.getWidth()),
+	                Gdx.graphics.getHeight() - 100,
+	                new Texture(Gdx.files.internal("aGreyLarge.png")),    // imagen provisoria
+	                new Texture(Gdx.files.internal("Rocket2.png"))));      // bala
+	    }
 	 // Instanciar Power-Ups en la pantalla usando el Patrón Strategy
 	    powerUps.add(new PowerUp(200, 300, new Texture(Gdx.files.internal("imagenvidaextra.png")), new PowerUpVida()));
 	    powerUps.add(new PowerUp(500, 400, new Texture(Gdx.files.internal("imagendanioextra.png")), new PowerUpDanio()));
@@ -191,7 +197,7 @@ public class PantallaJuego implements Screen {
 		          ball.update();
 		      }
 		      for (EnemigoBase e : enemigos) {
-		    	    e.update(nave);
+		    	    e.update(nave, this);
 		      }
 		      if (jefe != null) {
 		    	    jefe.actualizar(nave, this);

@@ -2,6 +2,7 @@ package enemigos;
 
 import com.badlogic.gdx.graphics.Texture;
 import puppy.code.Nave4;
+import puppy.code.PantallaJuego;
 
 public class EnemigoPerseguidor extends EnemigoBase {
 
@@ -12,7 +13,7 @@ public class EnemigoPerseguidor extends EnemigoBase {
     }
 
     @Override
-    public void update(Nave4 nave) {
+    public void update(Nave4 nave, PantallaJuego pantalla) {
     	float dx = nave.getX() - spr.getX();
         float dy = nave.getY() - spr.getY();
         float largo = (float) Math.sqrt(dx * dx + dy * dy);

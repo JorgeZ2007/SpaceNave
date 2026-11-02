@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import puppy.code.PantallaJuego;
 import puppy.code.Nave4;
 
 public abstract class EnemigoBase {
@@ -19,7 +20,7 @@ public abstract class EnemigoBase {
     }
 
     
-    public abstract void update(Nave4 nave);
+    public abstract void update(Nave4 nave, PantallaJuego pantalla);
 
     public void recibirDanio(int danio) { 
         vida -= danio;
