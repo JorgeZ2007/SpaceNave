@@ -1,11 +1,15 @@
 package puppy.code;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -178,11 +182,16 @@ public class Nave4 {
 		}
 	}
 	
-	public void dispararUlti(PantallaJuego pantalla) {
+	public void dispararUlti() {
 		if (!ultiDesbloqueada) return ;
 		if (ulti.habilidadCargada()) {
-			ulti.usarHabilidad(this, pantalla);
+			ulti.activarHabilidad(this);
 		}
+	}
+	
+	public void generarOnda(float delta, ArrayList<Ball2> balls1, ArrayList<Ball2> balls2,
+			  				ShapeRenderer shapeRenderer, OrthographicCamera camera, Nave4 nave) {
+		((OndaExpansiva)ulti).crearOnda(delta, balls1, balls2, shapeRenderer, camera, nave) ;
 	}
 	
 	public int getCargaHabilidad() {
