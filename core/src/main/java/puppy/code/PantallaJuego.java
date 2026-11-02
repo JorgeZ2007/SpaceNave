@@ -113,7 +113,7 @@ public class PantallaJuego implements Screen {
 	                    new Texture(Gdx.files.internal("aGreyLarge.png"))));   // imagen provisoria
 	        }
 	    }
-	    if (ronda >= 2) {
+	    if (ronda >= 1) {
 	        enemigos.add(new enemigofranco(r.nextInt(Gdx.graphics.getWidth()),
 	                Gdx.graphics.getHeight() - 100,
 	                new Texture(Gdx.files.internal("aGreyLarge.png")),    // imagen provisoria
