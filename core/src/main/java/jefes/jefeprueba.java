@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Color;
 import puppy.code.Bullet;
 import com.badlogic.gdx.math.MathUtils;
 
+// ESTE ES EL JEFE DE LA RONDA 3, SE LE DEJA JEFEPRUEBA PORQUE YA AVANZAMOS MUCHO USANDO ESE NOMBRE Y NO QUEREMOS 
+// CAMBIAR EL NOMBRE EN DIFERENTES ARCHIVOS :)))
 public class jefeprueba extends Jefe {
 	
 	private boolean invulnerable = false;

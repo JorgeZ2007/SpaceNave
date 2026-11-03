@@ -90,4 +90,7 @@ public abstract class Jefe {
     public String getRutaMusica() {
         return null;        // se pone null pa q use la musica de base
     }
+    public boolean haceDanioAlContacto() {
+        return false;
+    }
 }

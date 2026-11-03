@@ -20,6 +20,7 @@ import enemigos.enemigofranco;
 
 import jefes.Jefe; 
 import jefes.jefeprueba;
+import jefes.jeferonda4;
 
 import powerUps.PowerUp;
 import powerUps.PowerUpDanio;
@@ -79,8 +80,12 @@ public class PantallaJuego implements Screen {
 		
 		
 		if (gestor.rondaJefe()) {
-            jefe = new jefeprueba(Gdx.graphics.getWidth()/2 - 64, Gdx.graphics.getHeight() - 150,
+			if (ronda == 4) {
+				jefe = new jeferonda4(Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() - 150, new Texture(Gdx.files.internal("jefe2.png")));
+			} else {
+				jefe = new jefeprueba(Gdx.graphics.getWidth()/2 - 64, Gdx.graphics.getHeight() - 150,
                     new Texture(Gdx.files.internal("jefe1.png")));
+			}
         }
 		
 		
@@ -117,7 +122,7 @@ public class PantallaJuego implements Screen {
 	        for (int i = 0; i < 3; i++) {
 	            enemigos.add(new EnemigoPerseguidor(r.nextInt(Gdx.graphics.getWidth()),
 	                    Gdx.graphics.getHeight() - 100,
-	                    new Texture(Gdx.files.internal("aGreyLarge.png"))));   // imagen provisoria
+	                    new Texture(Gdx.files.internal("kamikaze.png"))));   
 	        }
 	    }
 	    if (ronda >= 1) {
@@ -203,6 +208,9 @@ public class PantallaJuego implements Screen {
 		      }
 		      if (jefe != null) {
 		    	    jefe.actualizar(nave, this);
+		    	    if (jefe.haceDanioAlContacto()) {
+		    	        nave.checkCollision(jefe.getArea());
+		    	    }
 		    	}
 		      for (int i = 0; i < balasEnemigas.size(); i++) {
 		    	    Bullet b = balasEnemigas.get(i);
