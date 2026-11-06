@@ -1,4 +1,5 @@
 package puppy.code;
+import jefes.* ;
 
 import java.util.ArrayList;
 
@@ -31,8 +32,11 @@ public class Nave4 {
     private boolean herido = false;
     private int tiempoHeridoMax=50;
     private int tiempoHerido;
-    private HabilidadDefinitiva ulti ;
-    private boolean ultiDesbloqueada ;
+    
+    private HabilidadDefinitiva ultiOnda ;
+    private boolean ultiOndaDesbloqueada ;
+    private HabilidadDefinitiva ultiLaser ;
+    private boolean ultiLaserDesbloqueada ;
     
     
     public Nave4(int x, int y, Texture tx, Sound soundChoque, Texture txBala, Sound soundBala) {
@@ -43,8 +47,11 @@ public class Nave4 {
     	spr.setPosition(x, y);
     	spr.setBounds(x, y, 45, 45);
     	
-    	ulti=new OndaExpansiva() ;
-    	ultiDesbloqueada=false ;
+    	ultiOnda=new OndaExpansiva() ;
+    	ultiOndaDesbloqueada=false ;
+    	
+    	ultiLaser=new LaserTeledirigido() ;
+    	ultiLaserDesbloqueada=false ;
     	
     	spr.setOriginCenter();
     	
@@ -168,35 +175,57 @@ public class Nave4 {
 	    this.danio = danio; 
 	}
 	
-	// Habilidad definitiva:
+	// Habilidad definitiva onda:
 	
-	public void desbloquearUlti(int ronda) {
+	public void desbloquearUltiOnda(int ronda) {
 		if (ronda>2) {
-			ultiDesbloqueada=true ;
+			ultiOndaDesbloqueada=true ;
 		}
 	}
 	
-	public void cargarUlti(int cantidad) {
-		if (ultiDesbloqueada) {
-			ulti.cargar(cantidad) ;
+	public void cargarUltiOnda(int cantidad) {
+		if (ultiOndaDesbloqueada) {
+			ultiOnda.cargar(cantidad) ;
 		}
 	}
 	
-	public void dispararUlti() {
-		if (!ultiDesbloqueada) return ;
-		if (ulti.habilidadCargada()) {
-			ulti.activarHabilidad(this);
+	public void dispararUltiOnda() {
+		if (!ultiOndaDesbloqueada) return ;
+		if (ultiOnda.habilidadCargada()) {
+			ultiOnda.activarHabilidad(this);
 		}
 	}
 	
 	public void generarOnda(float delta, ArrayList<Ball2> balls1, ArrayList<Ball2> balls2,
-			  				ShapeRenderer shapeRenderer, OrthographicCamera camera, Nave4 nave) {
-		((OndaExpansiva)ulti).crearOnda(delta, balls1, balls2, shapeRenderer, camera, nave) ;
+			  				ShapeRenderer shapeRenderer, OrthographicCamera camera) {
+		((OndaExpansiva)ultiOnda).crearOnda(delta, balls1, balls2, shapeRenderer, camera, this) ;
 	}
 	
-	public int getCargaHabilidad() {
-		return ulti.getProgresoCarga() ;
+	
+	// Habilidad definitiva laser:
+	public void desbloquearUltiLaser(int ronda) {
+		if (ronda>3) {
+			ultiLaserDesbloqueada=true ;
+		}
 	}
+	
+	public void cargarUltiLaser(int cantidad) {
+		if (ultiLaserDesbloqueada) {
+			ultiLaser.cargar(cantidad) ;
+		}
+	}
+	
+	public void dispararUltiLaser() {
+		if (!ultiLaserDesbloqueada) return ;
+		if (ultiLaser.habilidadCargada()) {
+			ultiLaser.activarHabilidad(this);
+		}
+	}
+	
+	public void generarLaser(float delta, Jefe enemigoJefe,
+				ShapeRenderer shapeRenderer, OrthographicCamera camera) {
+		((LaserTeledirigido)ultiLaser).crearLaser(delta, enemigoJefe, shapeRenderer, camera, this) ;
+}
 	
 	
 	public void mirarHacia(float dx, float dy) {

@@ -56,10 +56,10 @@ public class OndaExpansiva implements HabilidadDefinitiva {
   	  shapeRenderer.setColor(Color.DARK_GRAY) ;
   	  shapeRenderer.rect(50, 50, 200, 15) ;
   	  
-  	  float progreso=nave.getCargaHabilidad() ;
+  	  float progreso=carga ;
   	  float ancho=(progreso/100f)*200 ;
   	  
-  	  shapeRenderer.setColor(Color.PINK) ;
+  	  shapeRenderer.setColor(Color.CYAN) ;
   	  shapeRenderer.rect(50, 50, ancho, 15) ;
   	  shapeRenderer.end() ;
 		
@@ -74,8 +74,5 @@ public class OndaExpansiva implements HabilidadDefinitiva {
 		return false ;
 	}
 	
-	public int getProgresoCarga() {
-		return carga ;
-	}
 	
 }

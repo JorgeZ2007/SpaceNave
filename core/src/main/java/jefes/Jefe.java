@@ -18,6 +18,10 @@ public abstract class Jefe {
     // Contadores para los cooldowns (en frames)
     private float contadorAtaque;
     private float contadorEspecial;
+    
+    public int getX() {return (int) spr.getX();}
+    public int getY() {return (int) spr.getY();}
+    public int getWidth() {return (int) spr.getWidth();}
 
     public Jefe(float x, float y, int vidaMaxima, Texture tx) {
     	spr = new Sprite(tx);

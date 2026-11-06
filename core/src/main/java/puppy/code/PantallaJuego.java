@@ -153,7 +153,10 @@ public class PantallaJuego implements Screen {
 		  
 		  // Para usar la ulti con la tecla 'z'
 		  if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.Z)) {
-			  nave.dispararUlti() ;
+			  nave.dispararUltiOnda() ;
+		  }
+		  if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.X)) {
+			  nave.dispararUltiLaser() ;
 		  }
 		  
 		  camera.update();
@@ -176,7 +179,8 @@ public class PantallaJuego implements Screen {
 		            	 balls2.remove(j);
 		            	 j--;
 		            	 GestorPuntaje.getInstancia().derrotarEnemigo();
-		            	 nave.cargarUlti(25) ;
+		            	 nave.cargarUltiOnda(25) ;
+		            	 nave.cargarUltiLaser(25) ;
 		              }   	  
 		  	        }
 		            for (int j = 0; j < enemigos.size(); j++) {
@@ -188,7 +192,8 @@ public class PantallaJuego implements Screen {
 		                        enemigos.remove(j);
 		                        j--;
 		                        GestorPuntaje.getInstancia().derrotarEnemigo();
-		                        nave.cargarUlti(50);
+		                        nave.cargarUltiOnda(25);
+		                        nave.cargarUltiLaser(25) ;
 		                    }
 		                }
 		            }
@@ -291,13 +296,16 @@ public class PantallaJuego implements Screen {
 	      batch.end();
 	      
 	   // Habilidad definitiva onda expansiva
-	      nave.generarOnda(delta, balls1, balls2, shapeRenderer, camera, nave) ;
+	      nave.generarOnda(delta, balls1, balls2, shapeRenderer, camera) ;
+	      
+	      nave.generarLaser(delta, jefe, shapeRenderer, camera) ;
 	      
 	      
 	      //nivel completado
     	  boolean rondaTerminada = (jefe != null) ? jefe.estaDerrotado()
                   : (balls1.isEmpty() && enemigos.isEmpty());
-	      nave.desbloquearUlti(ronda) ;
+	      nave.desbloquearUltiOnda(ronda) ;
+	      nave.desbloquearUltiLaser(ronda) ;
 	      if (rondaTerminada) {
 	    	if (ronda>=5) {
 	    		Screen ss = new PantallaGameOver(game);
