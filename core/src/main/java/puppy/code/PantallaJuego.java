@@ -80,12 +80,15 @@ public class PantallaJuego implements Screen {
 		
 		
 		if (gestor.rondaJefe()) {
+			DirectorJefe director=new DirectorJefe() ;
+			BuilderJefe builder= new BuilderJefe() ;
 			if (ronda == 4) {
 				jefe = new jeferonda4(Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() - 150, new Texture(Gdx.files.internal("jefe2.png")));
 			} else {
-				jefe = new jefeprueba(Gdx.graphics.getWidth()/2 - 64, Gdx.graphics.getHeight() - 150,
-                    new Texture(Gdx.files.internal("jefe1.png")));
+				director.construirJefeAparicion1(builder, new Texture(Gdx.files.internal("jefe1.png"))) ;
+				jefe=builder.getResultado() ;
 			}
+			
         }
 		
 		

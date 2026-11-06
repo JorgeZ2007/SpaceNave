@@ -12,15 +12,17 @@ import com.badlogic.gdx.math.MathUtils;
 // CAMBIAR EL NOMBRE EN DIFERENTES ARCHIVOS :)))
 public class jefeprueba extends Jefe {
 	
-	private boolean invulnerable = false;
+	private boolean invulnerable;
+	private boolean puedeInvulnerable ;
 	private float tiempoInvulnerable = 0;
 	private static final float DURACION_INVULNERABLE = 3f;
 	private Texture txBala = new Texture(Gdx.files.internal("Rocket2.png"));
 	private int patronActual = 0;
 
 	private int velX = 3;   
-    public jefeprueba(float x, float y, Texture tx) {
-        super(x, y, 90, tx);
+    public jefeprueba(float x, float y, int vida, Texture tx, boolean invulnerable) {
+        super(x, y, vida, tx);
+        puedeInvulnerable=invulnerable ;
     }
 
     @Override
@@ -44,12 +46,14 @@ public class jefeprueba extends Jefe {
 
     @Override
     protected void ataqueEspecial(Nave4 nave, PantallaJuego pantalla) {
+    	if (!puedeInvulnerable) return ;
     	invulnerable = true;
         tiempoInvulnerable = DURACION_INVULNERABLE;
         spr.setColor(0.4f, 0.6f, 1f, 1f);
     }
     @Override
     protected void actualizarFase() {
+    	if (!puedeInvulnerable) return ;
         if (invulnerable) {
             tiempoInvulnerable -= Gdx.graphics.getDeltaTime();
             if (tiempoInvulnerable <= 0) {

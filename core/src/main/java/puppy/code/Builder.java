@@ -1,9 +1,12 @@
 package puppy.code;
+import jefes.* ;
+import com.badlogic.gdx.graphics.Texture ;
 
 public interface Builder {
 	void reset() ;
-	void atributos(int vidas, int velX, int velY) ; // temporal
-	// JefeEnemigo getResultado() ; comentario hasta que se cree la clase enemigo jefe
-	
-
+	BuilderJefe posicion(float x, float y) ;
+	BuilderJefe vidaMaxima(int vida) ;
+	BuilderJefe invulnerabilidadActiva(boolean invulnerable) ;
+	BuilderJefe texturaJefe(Texture textura) ;
+	jefeprueba getResultado() ;
 }
