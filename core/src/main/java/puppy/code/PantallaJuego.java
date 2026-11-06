@@ -102,7 +102,7 @@ public class PantallaJuego implements Screen {
 		gameMusic.play();
 		
 	    // cargar imagen de la nave, 64x64   
-	    nave = new Nave4(Gdx.graphics.getWidth()/2-50,30,new Texture(Gdx.files.internal("MainShip3.png")),
+	    nave = new Nave4(Gdx.graphics.getWidth()/2-50,30,new Texture(Gdx.files.internal("nave_sprite.png")),
 	    				Gdx.audio.newSound(Gdx.files.internal("hurt.ogg")), 
 	    				new Texture(Gdx.files.internal("Rocket2.png")), 
 	    				Gdx.audio.newSound(Gdx.files.internal("pop-sound.mp3"))); 
