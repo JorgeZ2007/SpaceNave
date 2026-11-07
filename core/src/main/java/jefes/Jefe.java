@@ -37,7 +37,7 @@ public abstract class Jefe {
         contadorAtaque += delta;
         contadorEspecial += delta;
         
-        mover();
+       
         mover();
         if (puedeUsarEspecial()) {
             ataqueEspecial(nave, pantalla);

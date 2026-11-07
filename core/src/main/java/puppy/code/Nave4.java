@@ -63,10 +63,22 @@ public class Nave4 {
         float y =  spr.getY();
         if (!herido) {
 	        // que se mueva con teclado
-        	if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT))  { xVel--; mirarHacia(-1, 0); }
-        	if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) { xVel++; mirarHacia(1, 0); }
-        	if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN))  { yVel--; mirarHacia(0, -1); }
-        	if (Gdx.input.isKeyJustPressed(Input.Keys.UP))    { yVel++; mirarHacia(0, 1); }
+        	if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT))  {mirarHacia(-1, 0); }
+        	if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {mirarHacia(1, 0); }
+        	if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN))  {mirarHacia(0, -1); }
+        	if (Gdx.input.isKeyJustPressed(Input.Keys.UP))    {mirarHacia(0, 1); }
+        	
+        	float vel = 4; // ahi vamos ajustando la velocidad pa q vaya mejor papus
+            xVel = 0;
+            yVel = 0;
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))  xVel -= vel;
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) xVel += vel;
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN))  yVel -= vel;
+            if (Gdx.input.isKeyPressed(Input.Keys.UP))    yVel += vel;
+            
+            float nx = MathUtils.clamp(x + xVel, 0, 800 - spr.getWidth());
+            float ny = MathUtils.clamp(y + yVel, 0, 600 - spr.getHeight());
+            spr.setPosition(nx, ny);
         	
 	     /*   if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) spr.setRotation(++rotacion);
 	        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) spr.setRotation(--rotacion);
@@ -82,13 +94,7 @@ public class Nave4 {
 	        	     
 	        }*/
 	        
-	        // que se mantenga dentro de los bordes de la ventana
-	        if (x+xVel < 0 || x+xVel+spr.getWidth() > Gdx.graphics.getWidth())
-	        	xVel*=-1;
-	        if (y+yVel < 0 || y+yVel+spr.getHeight() > Gdx.graphics.getHeight())
-	        	yVel*=-1;
-	        
-	        spr.setPosition(x+xVel, y+yVel);   
+	         
 	        
          
  		    spr.draw(batch);

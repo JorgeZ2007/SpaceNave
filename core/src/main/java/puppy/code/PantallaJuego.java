@@ -147,8 +147,9 @@ public class PantallaJuego implements Screen {
 		CharSequence str = "Vidas: "+nave.getVidas()+" Ronda: "+ronda;
 		game.getFont().getData().setScale(2f);		
 		game.getFont().draw(batch, str, 10, 30);
-		game.getFont().draw(batch, "Score:"+GestorPuntaje.getInstancia().getPuntaje(), Gdx.graphics.getWidth()-20, Gdx.graphics.getHeight()-30);
-		game.getFont().draw(batch, "HighScore:"+game.getHighScore(), Gdx.graphics.getWidth()-20, Gdx.graphics.getHeight()-70);
+		float xScore = Gdx.graphics.getWidth() - 260;
+	    game.getFont().draw(batch, "Score:"+GestorPuntaje.getInstancia().getPuntaje(), xScore, Gdx.graphics.getHeight()-30);
+	    game.getFont().draw(batch, "HighScore:"+game.getHighScore(), xScore, Gdx.graphics.getHeight()-70);
 	}
 	@Override
 	public void render(float delta) {
