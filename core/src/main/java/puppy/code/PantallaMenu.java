@@ -5,18 +5,22 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.Texture;
 
 
 public class PantallaMenu implements Screen {
 
 	private SpaceNavigation game;
 	private OrthographicCamera camera;
+	private Texture txMenuFondo;
 
 	public PantallaMenu(SpaceNavigation game) {
 		this.game = game;
         
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 1200, 800);
+		
+		txMenuFondo = new Texture(Gdx.files.internal("fondoInicial.jpeg"));
 	}
 
 	@Override
@@ -27,15 +31,14 @@ public class PantallaMenu implements Screen {
 		game.getBatch().setProjectionMatrix(camera.combined);
 
 		game.getBatch().begin();
-		game.getFont().draw(game.getBatch(), "Space Navigation: El Viaje del Heroe", 100, 500);
-		game.getFont().draw(game.getBatch(), "Surca la galaxia para erradicar las fuerzas del mal 7w7.", 100, 430);
-		game.getFont().draw(game.getBatch(), "Haz clic o presiona cualquier tecla para comenzar...", 100, 320);
+		
+		game.getBatch().draw(txMenuFondo, 0, 0, 1200, 800);
 	
 		game.getBatch().end();
 
+		// Si el usuario presiona cualquier tecla o hace clic, inicia el juego
 		if (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
-			// cambiar la cantidad de vidas cuando se deban probar cositirijillas
-			Screen ss = new PantallaJuego(game,1,500);
+			Screen ss = new PantallaJuego(game, 1, 500);
 			ss.resize(1200, 800);
 			game.setScreen(ss);
 			dispose();
