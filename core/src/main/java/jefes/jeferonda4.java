@@ -127,7 +127,7 @@ public class jeferonda4 extends Jefe {
         float largo = (float) Math.sqrt(dx * dx + dy * dy);
         if (largo == 0) largo = 1;
 
-        // apuntar 150 px más allá de la nave, sin salirse de la pantalla
+        // apuntar 150 px mas alla de la nave, sin salirse de la pantalla
         destinoX = MathUtils.clamp(spr.getX() + dx / largo * (largo + 150),
                                    0, Gdx.graphics.getWidth() - spr.getWidth());
         destinoY = MathUtils.clamp(spr.getY() + dy / largo * (largo + 150),

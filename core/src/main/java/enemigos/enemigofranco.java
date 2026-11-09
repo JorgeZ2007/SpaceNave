@@ -10,7 +10,7 @@ import puppy.code.Bullet;
 public class enemigofranco extends EnemigoBase {
 
     private float velocidad = 1.2f;
-    private float distanciaSegura = 350;   // si la nave está más cerca que esto, huye
+    private float distanciaSegura = 350;   // si la nave esta mas cerca que esto, huye
     private float cooldownDisparo = 2.5f;  // segundos entre disparos
     private float contadorDisparo = 0;
     private float velBala = 5;
@@ -23,7 +23,7 @@ public class enemigofranco extends EnemigoBase {
 
     @Override
     public void update(Nave4 nave, PantallaJuego pantalla) {
-        float dx = spr.getX() - nave.getX();  //(al revés que el perseguidor: del jugador hacia el enemigo)
+        float dx = spr.getX() - nave.getX();  //(al reves que el perseguidor: del jugador hacia el enemigo)
         float dy = spr.getY() - nave.getY();
         float largo = (float) Math.sqrt(dx*dx + dy*dy); 
         

@@ -137,7 +137,7 @@ public class PantallaJuego implements Screen {
 	    
 	    // Nuevo fondo
 	    txFondo = new Texture(Gdx.files.internal("fondoGame.jpeg"));
-	 // Instanciar Power-Ups en la pantalla usando el Patrón Strategy
+	 // Instanciar Power-Ups en la pantalla usando el Patron Strategy
 	    powerUps.add(new PowerUp(200, 300, new Texture(Gdx.files.internal("imagenvidaextra.png")), new PowerUpVida()));
 	    powerUps.add(new PowerUp(500, 400, new Texture(Gdx.files.internal("imagendanioextra.png")), new PowerUpDanio()));
 	    
@@ -251,7 +251,7 @@ public class PantallaJuego implements Screen {
 	          PowerUp p = powerUps.get(i);
 	          p.draw(batch);
 	          if (p.checkCollision(nave)) {
-	              p.recolectar(nave); // Ejecuta la estrategia correspondiente (vida o daño)
+	              p.recolectar(nave); // Ejecuta la estrategia correspondiente (vida o dano)
 	              powerUps.remove(i);
 	              i--;
 	          }
@@ -272,7 +272,7 @@ public class PantallaJuego implements Screen {
 	      for (int i = 0; i < balls1.size(); i++) {
 	    	    Ball2 b=balls1.get(i);
 	    	    b.draw(batch);
-		          //perdiÃ³ vida o game over
+		          //perdia vida o game over
 	              if (nave.checkCollision(b)) {
 		            //asteroide se destruye con el choque             
 	            	 balls1.remove(i);

@@ -64,7 +64,7 @@ public class jefeprueba extends Jefe {
     }
     @Override
     public void recibirDanio(int danio) {
-        if (invulnerable) return;                   // ignora el daño
+        if (invulnerable) return;                   // ignora el dano
         super.recibirDanio(danio);
     }
     private void patronCirculo(PantallaJuego pantalla, int cantidad) {

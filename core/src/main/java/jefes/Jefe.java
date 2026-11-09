@@ -31,7 +31,7 @@ public abstract class Jefe {
         this.vida = vidaMaxima;
     }
 
-    // ===== MÉTODO PLANTILLA =====
+    // ===== METODO PLANTILLA =====
     public final void actualizar(Nave4 nave, PantallaJuego pantalla) {
     	float delta = Gdx.graphics.getDeltaTime();
         contadorAtaque += delta;
@@ -70,7 +70,7 @@ public abstract class Jefe {
 
     protected void actualizarFase() { }
 
-    // ===== COMÚN A TODOS LOS JEFES =====
+    // ===== COMUN A TODOS LOS JEFES =====
     private void reiniciarCargaEspecial() {
         //contadorEspecial = 0
     }

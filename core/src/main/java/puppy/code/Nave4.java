@@ -21,7 +21,7 @@ public class Nave4 {
 	private boolean destruida = false;
     private int vidas = 3;
     private float xVel = 0;
-    private int danio = 1; // Daño base inicial de los disparos de la nave
+    private int danio = 1; // Dano base inicial de los disparos de la nave
     private float yVel = 0;
     private float dirDisparoX = 0;
     private float dirDisparoY = 1;  

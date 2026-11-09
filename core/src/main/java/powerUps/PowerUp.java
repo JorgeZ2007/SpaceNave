@@ -9,7 +9,7 @@ public class PowerUp {
     private float x, y;
     private Texture textura;
     private Rectangle bounds;
-    private IEstrategiaPowerUp estrategia; // Patrón Strategy
+    private IEstrategiaPowerUp estrategia; // Patron Strategy
     private boolean destruido = false;
     private static final float ancho = 32;
     private static final float alto = 32;
@@ -24,7 +24,7 @@ public class PowerUp {
 
     public void recolectar(Nave4 nave) {
         if (!destruido) {
-            estrategia.aplicarEfecto(nave); // Ejecuta dinámicamente la estrategia
+            estrategia.aplicarEfecto(nave); // Ejecuta dinamicamente la estrategia
             destruido = true;
         }
     }

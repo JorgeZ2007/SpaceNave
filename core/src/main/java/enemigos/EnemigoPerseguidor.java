@@ -6,10 +6,10 @@ import puppy.code.PantallaJuego;
 
 public class EnemigoPerseguidor extends EnemigoBase {
 
-    private float velocidad = 1.5f;     // más lento que un asteroide, o es imposible esquivarlo
+    private float velocidad = 1.5f;     // mas lento que un asteroide pa q se faicl de esquivar
 
     public EnemigoPerseguidor(float x, float y, Texture tx) {
-        super(x, y, 40, 40, 2, tx);     // ancho, alto y vida (aguanta 2 disparos)
+        super(x, y, 40, 40, 2, tx);     //esto pa calcular su alto y ancho
     }
 
     @Override
@@ -17,7 +17,7 @@ public class EnemigoPerseguidor extends EnemigoBase {
     	float dx = nave.getX() - spr.getX();
         float dy = nave.getY() - spr.getY();
         float largo = (float) Math.sqrt(dx * dx + dy * dy);
-        if (largo == 0) return;                       // ya está encima de la nave
+        if (largo == 0) return;                       
 
         spr.setPosition(spr.getX() + (dx / largo) * velocidad,
                         spr.getY() + (dy / largo) * velocidad);

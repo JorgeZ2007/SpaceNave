@@ -11,7 +11,7 @@ public class GestorRondas {
 	}
 	
 	
-	// Métodos para gestionar cada ronda de forma individual
+	// Metodos para gestionar cada ronda de forma individual
 	
 	public int generarEnemigos() {
 		if (ronda==1) return 10 ;
