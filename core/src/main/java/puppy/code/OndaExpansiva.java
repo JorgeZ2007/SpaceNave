@@ -1,5 +1,7 @@
 package puppy.code;
 import java.util.ArrayList ;
+import enemigos.* ;
+import jefes.* ;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,10 +26,12 @@ public class OndaExpansiva implements HabilidadDefinitiva {
 	}
 	
 	public void crearOnda(float delta, ArrayList<Ball2> balls1, ArrayList<Ball2> balls2,
-						  ShapeRenderer shapeRenderer, OrthographicCamera camera, Nave4 nave) {
+						  ShapeRenderer shapeRenderer, OrthographicCamera camera, Nave4 nave, 
+						  ArrayList<EnemigoBase> enemigo, Jefe jefe) {
 		if (habilidadActiva) {
 	    	  radioOnda+=velOnda*delta ;
 	    	  
+	    	  // daño a los asteroides
 	    	  for (int i=0; i<balls1.size(); i++) {
 	    		  Ball2 b=balls1.get(i) ;
 	    		  float distancia= (float) Math.hypot(b.getX()-ondaX, b.getY()-ondaY) ;
@@ -39,6 +43,21 @@ public class OndaExpansiva implements HabilidadDefinitiva {
 	    			  GestorPuntaje.getInstancia().derrotarEnemigo() ;
 	    		  }
 	    	  }
+	    	  // daño enemigos
+	    	  for (EnemigoBase e: enemigo) {
+	    		  float distancia= (float) Math.hypot(e.getX()-ondaX, e.getY()-ondaY) ;
+	    		  if (distancia<=radioOnda) {
+	    			  e.recibirDanio(2) ;
+	    		  }
+	    	  }
+	    	  // daño jefes
+	    	  if (jefe!=null) {
+	    		  float distancia= (float) Math.hypot(jefe.getX()-ondaX, jefe.getY()-ondaY) ;
+	    		  if (distancia<=radioOnda) {
+	    			  jefe.recibirDanio(1) ;
+	    		  }
+	    	  }
+	    	  
 	    	  if (radioOnda>=radioMax) {
 	    		  habilidadActiva=false ;
 	    	  }
@@ -57,6 +76,7 @@ public class OndaExpansiva implements HabilidadDefinitiva {
   	  shapeRenderer.rect(50, 50, 200, 15) ;
   	  
   	  float progreso=carga ;
+  	  progreso=Math.min(progreso, 100f) ; 
   	  float ancho=(progreso/100f)*200 ;
   	  
   	  shapeRenderer.setColor(Color.CYAN) ;
@@ -74,5 +94,15 @@ public class OndaExpansiva implements HabilidadDefinitiva {
 		return false ;
 	}
 	
+	public int getCarga() {
+		return carga ;
+	}
+	
+	public void setCarga(int carga) {
+	    this.carga = carga;
+	    if (carga > 100) {
+	        carga = 100;
+	    }
+	}
 	
 }

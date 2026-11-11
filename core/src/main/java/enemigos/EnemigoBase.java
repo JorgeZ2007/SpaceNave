@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import puppy.code.PantallaJuego;
+import puppy.code.GestorPuntaje;
 import puppy.code.Nave4;
 
 public abstract class EnemigoBase {
@@ -20,6 +21,9 @@ public abstract class EnemigoBase {
     }
 
     
+    public int getX() {return (int) spr.getX();}
+    public int getY() {return (int) spr.getY();}
+    
     public abstract void update(Nave4 nave, PantallaJuego pantalla);
 
     public void recibirDanio(int danio) { 
@@ -27,6 +31,7 @@ public abstract class EnemigoBase {
         if (vida < 0) vida = 0;
     }
     public boolean estaDestruido() {
+    	if (vida==0) GestorPuntaje.getInstancia().derrotarEnemigo();
     	return vida <= 0;
     }
 

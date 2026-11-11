@@ -39,7 +39,7 @@ public class PantallaJuego implements Screen {
 	private SpriteBatch batch;
 	private Sound explosionSound;
 	private Music gameMusic;
-	//private int score;
+	private GestorRondas gestor;
 	private int ronda;
 	private int velXAsteroides; 
 	private int velYAsteroides; 
@@ -57,14 +57,18 @@ public class PantallaJuego implements Screen {
 	private Texture txFondo;
 	
 	private ShapeRenderer shapeRenderer ;
+	private float tiempoMensaje = 0f;
+	private boolean mostrarMensajeOnda = false;
+	private float tiempoMensajeLaser = 0f;
+	private boolean mostrarMensajeLaser = false;
 	
 
-	public PantallaJuego(SpaceNavigation game, int ronda, int vidas) {
+	public PantallaJuego(SpaceNavigation game, int ronda, int vidas, int cargaOnda, int cargaLaser) {
 		this.game = game;
 		this.ronda = ronda;
 		//this.score = score;
 		GestorPuntaje.getInstancia().reiniciarPuntaje(ronda) ;
-		GestorRondas gestor=new GestorRondas(ronda) ;
+		gestor=new GestorRondas(ronda) ;
 		this.velXAsteroides = gestor.gestionarVelocidadEnemigos() ;
 		this.velYAsteroides = gestor.gestionarVelocidadEnemigos() ;
 		this.cantAsteroides = gestor.generarEnemigos() ;
@@ -110,6 +114,8 @@ public class PantallaJuego implements Screen {
 	    				new Texture(Gdx.files.internal("Rocket2.png")), 
 	    				Gdx.audio.newSound(Gdx.files.internal("pop-sound.mp3"))); 
         nave.setVidas(vidas);
+        nave.setCargaOnda(cargaOnda) ;
+        nave.setCargaLaser(cargaLaser) ;
         
         //crear asteroides
         Random r = new Random();
@@ -159,6 +165,7 @@ public class PantallaJuego implements Screen {
 		  if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.Z)) {
 			  nave.dispararUltiOnda() ;
 		  }
+		  // Para usar la ulti con la tecla 'x'
 		  if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.X)) {
 			  nave.dispararUltiLaser() ;
 		  }
@@ -297,11 +304,33 @@ public class PantallaJuego implements Screen {
   			game.setScreen(ss);
   			dispose();
   		  }
+	      
+	      if (mostrarMensajeOnda) {
+	    	  game.getFont().draw(batch, "¡Habilidad de onda desbloqueda!", 330, 60 ) ;
+	      }
+	      if (mostrarMensajeLaser) {
+	    	  game.getFont().draw(batch, "¡Habilidad de laser desbloqueda!", 330, 60 ) ;
+	      }
+	      
 	      batch.end();
 	      
-	   // Habilidad definitiva onda expansiva
-	      nave.generarOnda(delta, balls1, balls2, shapeRenderer, camera) ;
+	      if (mostrarMensajeOnda) {
+	    	  tiempoMensaje-=delta ;
+	    	  if (tiempoMensaje<=0) {
+	    		  mostrarMensajeOnda=false ;
+	    	  }
+	      }
+	      if (mostrarMensajeLaser) {
+	    	  tiempoMensajeLaser-=delta ;
+	    	  if (tiempoMensajeLaser<=0) {
+	    		  mostrarMensajeLaser=false ;
+	    	  }
+	      }
 	      
+	      
+	   // Habilidad definitiva onda expansiva
+	      nave.generarOnda(delta, balls1, balls2, shapeRenderer, camera, enemigos, jefe) ;
+	   // Habilidad definitiva laser teledirigido
 	      nave.generarLaser(delta, jefe, shapeRenderer, camera) ;
 	      
 	      
@@ -310,15 +339,24 @@ public class PantallaJuego implements Screen {
                   : (balls1.isEmpty() && enemigos.isEmpty());
 	      nave.desbloquearUltiOnda(ronda) ;
 	      nave.desbloquearUltiLaser(ronda) ;
+	      if (gestor.desbloquearHabilidadOnda()) {
+	    	  tiempoMensaje = 5.0f;
+	    	  mostrarMensajeOnda = true;
+	      }
+	      if (gestor.desbloquearHabilidadLaser()) {
+	    	  tiempoMensajeLaser = 5.0f;
+	    	  mostrarMensajeLaser = true;
+	      }
+	      
 	      if (rondaTerminada) {
 	    	if (ronda>=5) {
-	    		Screen ss = new PantallaGameOver(game);
+	    		Screen ss = new PantallaGameOver(game); // aca va pantalla de victoria
 	  			ss.resize(1200, 800);
 	  			game.setScreen(ss);
 	  			dispose();
 	    	}
 	    	else {  
-	    		Screen ss = new PantallaJuego(game,ronda+1, nave.getVidas());
+	    		Screen ss = new PantallaJuego(game,ronda+1, nave.getVidas(), nave.getCargaOnda(), nave.getCargaLaser());
 				ss.resize(1200, 800);
 				game.setScreen(ss);
 				dispose();

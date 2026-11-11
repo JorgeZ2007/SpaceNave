@@ -1,5 +1,6 @@
 package puppy.code;
 import jefes.* ;
+import enemigos.* ;
 
 import java.util.ArrayList;
 
@@ -184,7 +185,7 @@ public class Nave4 {
 	// Habilidad definitiva onda:
 	
 	public void desbloquearUltiOnda(int ronda) {
-		if (ronda>2) {
+		if (ronda>=2) {
 			ultiOndaDesbloqueada=true ;
 		}
 	}
@@ -203,10 +204,18 @@ public class Nave4 {
 	}
 	
 	public void generarOnda(float delta, ArrayList<Ball2> balls1, ArrayList<Ball2> balls2,
-			  				ShapeRenderer shapeRenderer, OrthographicCamera camera) {
-		((OndaExpansiva)ultiOnda).crearOnda(delta, balls1, balls2, shapeRenderer, camera, this) ;
+			  				ShapeRenderer shapeRenderer, OrthographicCamera camera, 
+			  				ArrayList<EnemigoBase> enemigo, Jefe jefe) {
+		((OndaExpansiva)ultiOnda).crearOnda(delta, balls1, balls2, shapeRenderer, camera, this, enemigo, jefe) ;
 	}
 	
+	public int getCargaOnda() {
+		return ((OndaExpansiva)ultiOnda).getCarga() ;
+	}
+	
+	public void setCargaOnda(int carga) {
+	    ((OndaExpansiva)ultiOnda).setCarga(carga);
+	}
 	
 	// Habilidad definitiva laser:
 	public void desbloquearUltiLaser(int ronda) {
@@ -231,8 +240,15 @@ public class Nave4 {
 	public void generarLaser(float delta, Jefe enemigoJefe,
 				ShapeRenderer shapeRenderer, OrthographicCamera camera) {
 		((LaserTeledirigido)ultiLaser).crearLaser(delta, enemigoJefe, shapeRenderer, camera, this) ;
-}
+	}
 	
+	public int getCargaLaser() {
+		return ((LaserTeledirigido)ultiLaser).getCarga() ;
+	}
+	
+	public void setCargaLaser(int carga) {
+	    ((LaserTeledirigido)ultiLaser).setCarga(carga);
+	}
 	
 	public void mirarHacia(float dx, float dy) {
 	    dirDisparoX = dx;

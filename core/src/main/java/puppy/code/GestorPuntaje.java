@@ -30,11 +30,11 @@ public class GestorPuntaje {
 		return puntaje+=10 ;
 	}
 	
+	public int derrotarJefe() {
+		return puntaje+=100 ;
+	}
+	
 	/***
-	 * public int derrotarJefe() { 
-	 *     return puntaje+=100 ;
-	 * }
-	 * 
 	 * 
 	 * public int bonificacion() {
 	 *     return puntaje+=15 ; ?

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
+import puppy.code.GestorPuntaje;
 import puppy.code.Nave4;
 import puppy.code.PantallaJuego;
 
@@ -81,6 +82,7 @@ public abstract class Jefe {
     }
 
     public boolean estaDerrotado() {
+    	if (vida==0) GestorPuntaje.getInstancia().derrotarJefe();
     	return vida <= 0;
     }
 

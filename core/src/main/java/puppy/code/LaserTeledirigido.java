@@ -36,7 +36,7 @@ public class LaserTeledirigido implements HabilidadDefinitiva {
 			shapeRenderer.rectLine(nave.getX(), nave.getY(), centroJefeX, centroJefeY, 8f) ;
 			shapeRenderer.end() ;
 			
-			enemigoJefe.recibirDanio(3) ;
+			enemigoJefe.recibirDanio(2) ;
 			if (tiempoActivo>=tiempoMax) {
 				habilidadActiva=false ;
 			}
@@ -50,6 +50,7 @@ public class LaserTeledirigido implements HabilidadDefinitiva {
 	  	shapeRenderer.rect(50, 80, 200, 15) ;
 	  	  
 	  	float progreso=carga ;
+	  	progreso=Math.min(progreso, 100f) ;
 	  	float ancho=(progreso/100f)*200 ;
 	  	  
 	  	shapeRenderer.setColor(Color.RED) ;
@@ -66,5 +67,17 @@ public class LaserTeledirigido implements HabilidadDefinitiva {
 		if (carga>=cargaMaxima) return true ;
 		return false ;
 	}
+	
+	public int getCarga() {
+		return carga ;
+	}
+	
+	public void setCarga(int carga) {
+	    this.carga = carga ;
+	    if (carga > 100) {
+	        carga = 100;
+	    }
+	}
+	
 
 }

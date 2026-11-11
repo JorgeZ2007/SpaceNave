@@ -14,15 +14,12 @@ public class GestorRondas {
 	// Metodos para gestionar cada ronda de forma individual
 	
 	public int generarEnemigos() {
-		if (ronda==1) return 10 ;
-		
-		else if (ronda==2) {
-			return 15 ;
-		}
-		else if (ronda==3 || ronda==4) {
+		if (ronda>=3) {
 			return 5 ;
 		}
-		return 0 ; // Para el jefe final 
+		else if (rondaJefe()) return 0 ; // Para el jefe final 
+		
+		return 10 ; // rondas iniciales
 	}
 	
 	public int gestionarVelocidadEnemigos() {
@@ -36,6 +33,16 @@ public class GestorRondas {
 	
 	public boolean rondaJefe() {
 		if (ronda>2) return true ;
+		return false ;
+	}
+	
+	public boolean desbloquearHabilidadOnda() {
+		if (ronda==2) return true ;
+		return false ;
+	}
+	
+	public boolean desbloquearHabilidadLaser() {
+		if (ronda==4) return true ;
 		return false ;
 	}
 	
