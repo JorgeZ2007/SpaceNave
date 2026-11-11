@@ -34,6 +34,8 @@ public class GestorPuntaje {
 		return puntaje+=100 ;
 	}
 	
+	public void sumarPuntaje(int puntos) { this.puntaje += puntos; }
+	
 	/***
 	 * 
 	 * public int bonificacion() {

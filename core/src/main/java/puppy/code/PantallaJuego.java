@@ -25,6 +25,9 @@ import jefes.jeferonda4;
 import powerUps.PowerUp;
 import powerUps.PowerUpDanio;
 import powerUps.PowerUpVida;
+import powerUps.PowerUpPuntaje;
+
+import puppy.code.PantallaFinJuego;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -146,6 +149,7 @@ public class PantallaJuego implements Screen {
 	 // Instanciar Power-Ups en la pantalla usando el Patron Strategy
 	    powerUps.add(new PowerUp(200, 300, new Texture(Gdx.files.internal("imagenvidaextra.png")), new PowerUpVida()));
 	    powerUps.add(new PowerUp(500, 400, new Texture(Gdx.files.internal("imagendanioextra.png")), new PowerUpDanio()));
+	    powerUps.add(new PowerUp(350, 200, new Texture(Gdx.files.internal("spritePuntaje.png")), new PowerUpPuntaje()));
 	    
 	}
     
@@ -350,7 +354,7 @@ public class PantallaJuego implements Screen {
 	      
 	      if (rondaTerminada) {
 	    	if (ronda>=5) {
-	    		Screen ss = new PantallaGameOver(game); // aca va pantalla de victoria
+	    		Screen ss = new PantallaFinJuego(game); // aca va pantalla de victoria
 	  			ss.resize(1200, 800);
 	  			game.setScreen(ss);
 	  			dispose();

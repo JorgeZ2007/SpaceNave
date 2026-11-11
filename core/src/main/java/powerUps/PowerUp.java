@@ -31,7 +31,8 @@ public class PowerUp {
 
     public void draw(SpriteBatch batch) {
         if (!destruido) {
-            batch.draw(textura, x, y);
+            //batch.draw(textura, x, y);
+        	batch.draw(textura, x, y, 40, 40);
         }
     }
 
