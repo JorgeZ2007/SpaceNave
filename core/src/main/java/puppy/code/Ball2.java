@@ -67,17 +67,25 @@ public class Ball2 {
     }
     
     public void checkCollision(Ball2 b2) {
-        if(spr.getBoundingRectangle().overlaps(b2.spr.getBoundingRectangle())){
-        	// rebote
-            if (getXSpeed() ==0) setXSpeed(getXSpeed() + b2.getXSpeed()/2);
-            if (b2.getXSpeed() ==0) b2.setXSpeed(b2.getXSpeed() + getXSpeed()/2);
-        	setXSpeed(- getXSpeed());
-            b2.setXSpeed(-b2.getXSpeed());
+    	Rectangle r1 = this.spr.getBoundingRectangle();
+        Rectangle r2 = b2.spr.getBoundingRectangle();
+        
+        if (r1.overlaps(r2)) {
+            float cx1 = r1.x + r1.width / 2f;
+            float cy1 = r1.y + r1.height / 2f;
+            float cx2 = r2.x + r2.width / 2f;
+            float cy2 = r2.y + r2.height / 2f;
+
+            float angle = (float) Math.atan2(cy1 - cy2, cx1 - cx2);
+            float speed = 3.5f;
+            this.setXSpeed((int) (Math.cos(angle) * speed));
+            this.setySpeed((int) (Math.sin(angle) * speed));
             
-            if (getySpeed() ==0) setySpeed(getySpeed() + b2.getySpeed()/2);
-            if (b2.getySpeed() ==0) b2.setySpeed(b2.getySpeed() + getySpeed()/2);
-            setySpeed(- getySpeed());
-            b2.setySpeed(- b2.getySpeed()); 
+            b2.setXSpeed((int) (-Math.cos(angle) * speed));
+            b2.setySpeed((int) (-Math.sin(angle) * speed));
+            
+            this.spr.translate((float) Math.cos(angle) * 4f, (float) Math.sin(angle) * 4f);
+            b2.spr.translate((float) -Math.cos(angle) * 4f, (float) -Math.sin(angle) * 4f);
         }
     }
 	public int getXSpeed() {
