@@ -21,6 +21,7 @@ import enemigos.enemigofranco;
 import jefes.Jefe; 
 import jefes.jefeprueba;
 import jefes.jeferonda4;
+import jefes.jefefinalmomonga;
 
 import powerUps.PowerUp;
 import powerUps.PowerUpDanio;
@@ -89,8 +90,12 @@ public class PantallaJuego implements Screen {
 		if (gestor.rondaJefe()) {
 			DirectorJefe director=new DirectorJefe() ;
 			BuilderJefe builder= new BuilderJefe() ;
-			if (ronda == 4) {
-				jefe = new jeferonda4(Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() - 150, new Texture(Gdx.files.internal("jefe2.png")));
+			if (ronda == 5) {
+			    jefe = new jefefinalmomonga(Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() - 150,
+			                                     new Texture(Gdx.files.internal("aGreyLarge.png")));   // sprite temporal
+			} else if (ronda == 4) {
+			    jefe = new jeferonda4(Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() - 150,
+			                          new Texture(Gdx.files.internal("jefe2.png")));
 			} else {
 				director.construirJefeAparicion1(builder, new Texture(Gdx.files.internal("jefe1.png"))) ;
 				jefe=builder.getResultado() ;
@@ -206,9 +211,11 @@ public class PantallaJuego implements Screen {
 		                        explosionSound.play();
 		                        enemigos.remove(j);
 		                        j--;
-		                        GestorPuntaje.getInstancia().derrotarEnemigo();
-		                        nave.cargarUltiOnda(25);
-		                        nave.cargarUltiLaser(25) ;
+		                        if (e.daRecompensa()) {
+		                            GestorPuntaje.getInstancia().derrotarEnemigo();
+		                            nave.cargarUltiOnda(25);
+		                            nave.cargarUltiLaser(25);
+		                        }
 		                    }
 		                }
 		            }
@@ -223,9 +230,14 @@ public class PantallaJuego implements Screen {
 		      for (Ball2 ball : balls1) {
 		          ball.update();
 		      }
-		      for (EnemigoBase e : enemigos) {
+		      for (int i = 0; i < enemigos.size(); i++) {
+		    	    EnemigoBase e = enemigos.get(i);
 		    	    e.update(nave, this);
-		      }
+		    	    if (e.estaDestruido()) {
+		    	        enemigos.remove(i);
+		    	        i--;
+		    	    }
+		    	}
 		      if (jefe != null) {
 		    	    jefe.actualizar(nave, this);
 		    	    if (jefe.haceDanioAlContacto()) {
@@ -375,6 +387,9 @@ public class PantallaJuego implements Screen {
     }
     public void agregarBalaEnemiga(Bullet b) {
         balasEnemigas.add(b);
+    }
+    public void agregarEnemigo(EnemigoBase e) {
+        enemigos.add(e);
     }
 	
 	@Override

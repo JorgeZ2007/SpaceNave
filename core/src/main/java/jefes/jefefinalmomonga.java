@@ -1,0 +1,229 @@
+package jefes;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+
+import enemigos.enemigosenuelo;
+import puppy.code.Nave4;
+import puppy.code.PantallaJuego;
+import puppy.code.Bullet;
+
+/**
+ * Jefe final: aparece en un lugar, se queda un rato, desaparece y
+ * reaparece en otro punto de la pantalla.
+ *
+ * Hijo de Jefe (Template Method): solo escribe los pasos abstractos
+ * (mover, atacar, ataqueEspecial) y sobrescribe algunos hooks.
+ *
+ * El movimiento es una maquina de estados de 4 fases:
+ *   PRESENTE -> DESAPARECIENDO -> ESPERANDO -> APARECIENDO -> PRESENTE ...
+ *
+ * Habilidad especial "espejismo": salta a una esquina y deja 3 copias
+ * falsas (JefeSenuelo) en las otras esquinas. Solo una es la real.
+ */
+public class jefefinalmomonga extends Jefe {
+
+    private enum Fase { PRESENTE, DESAPARECIENDO, ESPERANDO, APARECIENDO }
+
+    // ===== Ajustes (probar y cambiar hasta que se sienta bien) =====
+    private static final float TIEMPO_PRESENTE = 3.5f;   // segundos visible y atacable
+    private static final float DURACION_FADE = 0.3f;     // segundos de desaparecer / aparecer
+    private static final float TIEMPO_ESPERA = 0.8f;     // segundos invisible (se ve el aviso)
+    private static final float DISTANCIA_MIN_NAVE = 250; // el destino queda al menos asi de lejos de la nave
+    private static final float MARGEN = 40;              // distancia minima a los bordes
+    private static final float COOLDOWN_ESPEJISMO = 15f; // segundos entre espejismos
+    private static final float DURACION_SENUELO = 10f;   // segundos que duran las copias falsas
+
+    private Fase fase = Fase.PRESENTE;
+    private float tiempoFase = 0;
+    private float destinoX, destinoY;
+
+    // mover() no recibe la nave ni la pantalla, asi que las guardamos cuando las vemos pasar
+    private Nave4 naveObjetivo;
+    private PantallaJuego pantallaRef;
+    
+    private static final float VEL_BALA = 3;
+    private Texture txBala = new Texture(Gdx.files.internal("Rocket2.png"));
+    private float desfase = 0;
+
+    // espejismo
+    private boolean espejismoPendiente = false;   // el especial se activo, falta saltar
+    private boolean senuelosPendientes = false;   // saltando a una esquina, falta crear las copias
+    private int esquinaReal;                      // 0..3: esquina donde esta el jefe verdadero
+
+    public jefefinalmomonga(float x, float y, Texture tx) {
+        super(x, y, 60, tx);   // 60 = vida maxima
+    }
+
+    // ==================== PASO ABSTRACTO: MOVER ====================
+    @Override
+    protected void mover() {
+        tiempoFase += Gdx.graphics.getDeltaTime();
+
+        switch (fase) {
+            case PRESENTE:
+                // quieto y visible; cuando pasa el tiempo, empieza a desaparecer
+                if (tiempoFase >= TIEMPO_PRESENTE || espejismoPendiente) {
+                    cambiarFase(Fase.DESAPARECIENDO);
+                }
+                break;
+
+            case DESAPARECIENDO:
+                // la opacidad baja de 1 a 0
+                spr.setAlpha(Math.max(0, 1 - tiempoFase / DURACION_FADE));
+                if (tiempoFase >= DURACION_FADE) {
+                    spr.setAlpha(0);
+                    elegirDestino();
+                    // se manda fuera de la pantalla para que las balas no choquen con un jefe invisible
+                    spr.setPosition(-1000, -1000);
+                    cambiarFase(Fase.ESPERANDO);
+                }
+                break;
+
+            case ESPERANDO:
+                // invisible; en draw() se muestra una silueta tenue en el destino
+                if (tiempoFase >= TIEMPO_ESPERA) {
+                    spr.setPosition(destinoX, destinoY);
+                    if (senuelosPendientes) {
+                        crearSenuelos();
+                        senuelosPendientes = false;
+                    }
+                    cambiarFase(Fase.APARECIENDO);
+                }
+                break;
+
+            case APARECIENDO:
+                // la opacidad sube de 0 a 1
+                spr.setAlpha(Math.min(1, tiempoFase / DURACION_FADE));
+                if (tiempoFase >= DURACION_FADE) {
+                    spr.setAlpha(1);
+                    cambiarFase(Fase.PRESENTE);
+                }
+                break;
+        }
+    }
+
+    private void cambiarFase(Fase nueva) {
+        fase = nueva;
+        tiempoFase = 0;
+    }
+
+    // Elige un punto al azar dentro de la pantalla, lejos de la nave si la conoce
+    private void elegirDestino() {
+        if (espejismoPendiente) {
+            // espejismo: el jefe real va a una esquina al azar
+            esquinaReal = MathUtils.random(0, 3);
+            destinoX = esquinaX(esquinaReal);
+            destinoY = esquinaY(esquinaReal);
+            espejismoPendiente = false;
+            senuelosPendientes = true;
+            return;
+        }
+
+        float maxX = Gdx.graphics.getWidth() - spr.getWidth() - MARGEN;
+        float maxY = Gdx.graphics.getHeight() - spr.getHeight() - MARGEN;
+
+        for (int i = 0; i < 20; i++) {
+            destinoX = MathUtils.random(MARGEN, maxX);
+            destinoY = MathUtils.random(MARGEN, maxY);
+            if (naveObjetivo == null || distanciaANave(destinoX, destinoY) >= DISTANCIA_MIN_NAVE) {
+                return;
+            }
+        }
+        // si en 20 intentos no encontro un punto lejano, se queda con el ultimo
+    }
+
+    private float distanciaANave(float x, float y) {
+        float dx = (x + spr.getWidth() / 2) - naveObjetivo.getX();
+        float dy = (y + spr.getHeight() / 2) - naveObjetivo.getY();
+        return (float) Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // Esquinas numeradas: 0 abajo-izq, 1 abajo-der, 2 arriba-izq, 3 arriba-der
+    private float esquinaX(int i) {
+        return (i % 2 == 0) ? MARGEN : Gdx.graphics.getWidth() - spr.getWidth() - MARGEN;
+    }
+
+    private float esquinaY(int i) {
+        return (i < 2) ? MARGEN : Gdx.graphics.getHeight() - spr.getHeight() - MARGEN;
+    }
+
+    // Pone una copia falsa en cada esquina, menos en la del jefe real
+    private void crearSenuelos() {
+        if (pantallaRef == null) return;
+        for (int i = 0; i < 4; i++) {
+            if (i == esquinaReal) continue;
+            pantallaRef.agregarEnemigo(new enemigosenuelo(esquinaX(i), esquinaY(i),
+                    spr.getWidth(), spr.getHeight(), spr.getTexture(), DURACION_SENUELO));
+        }
+    }
+
+    // ==================== PASO ABSTRACTO: ATACAR ====================
+    @Override
+    protected void atacar(Nave4 nave, PantallaJuego pantalla) {
+        naveObjetivo = nave;
+        pantallaRef = pantalla;
+        patronCirculo(pantalla, 16);
+        desfase += 11.25f;       // la proxima vez, los huecos quedan en otro lugar
+    }
+
+    // ==================== PASO ABSTRACTO: ATAQUE ESPECIAL ====================
+    @Override
+    protected void ataqueEspecial(Nave4 nave, PantallaJuego pantalla) {
+        naveObjetivo = nave;
+        pantallaRef = pantalla;
+        espejismoPendiente = true;   // mover() hace el salto a la esquina y crea las copias
+    }
+
+    // ==================== HOOKS ====================
+    @Override
+    protected float getCooldownEspecial() {
+        return COOLDOWN_ESPEJISMO;
+    }
+
+    // Solo ataca cuando esta presente y visible
+    @Override
+    protected boolean puedeAtacar() {
+        return fase == Fase.PRESENTE && super.puedeAtacar();
+    }
+
+    @Override
+    protected boolean puedeUsarEspecial() {
+        return fase == Fase.PRESENTE && super.puedeUsarEspecial();
+    }
+
+    // No recibe dano mientras desaparece, espera o aparece
+    @Override
+    public void recibirDanio(int danio) {
+        if (fase != Fase.PRESENTE) return;
+        super.recibirDanio(danio);
+    }
+
+    // Mientras esta invisible, se dibuja una silueta tenue en el destino como aviso
+    @Override
+    public void draw(SpriteBatch batch) {
+        if (fase == Fase.ESPERANDO) {
+            float x = spr.getX();
+            float y = spr.getY();
+            spr.setPosition(destinoX, destinoY);
+            spr.setAlpha(0.15f + 0.25f * (tiempoFase / TIEMPO_ESPERA));   // se va marcando
+            super.draw(batch);
+            spr.setAlpha(0);
+            spr.setPosition(x, y);
+        } else {
+            super.draw(batch);
+        }
+    }
+    private void patronCirculo(PantallaJuego pantalla, int cantidad) {
+        float x = spr.getX() + spr.getWidth() / 2;
+        float y = spr.getY() + spr.getHeight() / 2;
+        for (int i = 0; i < cantidad; i++) {
+            float angulo = desfase + i * (360f / cantidad);
+            float vx = VEL_BALA * MathUtils.cosDeg(angulo);
+            float vy = VEL_BALA * MathUtils.sinDeg(angulo);
+            pantalla.agregarBalaEnemiga(new Bullet(x, y, vx, vy, txBala));
+        }
+    }
+}

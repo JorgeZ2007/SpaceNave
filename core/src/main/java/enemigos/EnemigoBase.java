@@ -31,10 +31,11 @@ public abstract class EnemigoBase {
         if (vida < 0) vida = 0;
     }
     public boolean estaDestruido() {
-    	if (vida==0) GestorPuntaje.getInstancia().derrotarEnemigo();
-    	return vida <= 0;
+        if (vida==0 && daRecompensa()) GestorPuntaje.getInstancia().derrotarEnemigo();
+        return vida <= 0;
     }
 
+    public boolean daRecompensa() { return true; }
     public Rectangle getArea() { return spr.getBoundingRectangle(); }
     public void draw(SpriteBatch batch) { spr.draw(batch); }
 }
