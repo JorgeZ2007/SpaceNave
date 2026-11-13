@@ -17,10 +17,10 @@ public class jefefinalmomonga extends Jefe {
 
     private enum Fase { PRESENTE, DESAPARECIENDO, ESPERANDO, APARECIENDO }
 
-    // ===== Ajustes (probar y cambiar hasta que se sienta bien) =====
+   
     private static final float TIEMPO_PRESENTE = 3.5f;   // segundos visible y atacable
     private static final float DURACION_FADE = 0.3f;     // segundos de desaparecer / aparecer
-    private static final float TIEMPO_ESPERA = 0.8f;     // segundos invisible (se ve el aviso)
+    private static final float TIEMPO_ESPERA = 0.8f;     // segundos invisible 
     private static final float DISTANCIA_MIN_NAVE = 250; // el destino queda al menos asi de lejos de la nave
     private static final float MARGEN = 40;              // distancia minima a los bordes
     private static final float COOLDOWN_ESPEJISMO = 15f; // segundos entre espejismos
@@ -30,7 +30,7 @@ public class jefefinalmomonga extends Jefe {
     private float tiempoFase = 0;
     private float destinoX, destinoY;
 
-    // mover() no recibe la nave ni la pantalla, asi que las guardamos cuando las vemos pasar
+ 
     private Nave4 naveObjetivo;
     private PantallaJuego pantallaRef;
     
@@ -47,7 +47,7 @@ public class jefefinalmomonga extends Jefe {
     private int esquinaReal;                      // 0..3: esquina donde esta el jefe verdadero
     // Control del espejismo
     private float tiempoEspejismo = 0f;
-    // Duración del espejismo
+    // Duracion del espejismo
     private static final float DURACION_ESPEJISMO = 10f;
 
     
@@ -56,12 +56,12 @@ public class jefefinalmomonga extends Jefe {
         super(x, y, 90, tx);   // el 3er dato es la vida
     }
 
-    // ==================== PASO ABSTRACTO: MOVER ====================
+    
     @Override
     protected void mover() {
     	float delta = Gdx.graphics.getDeltaTime();
 
-        // Descontar duración del espejismo
+        // Descontar duracion del espejismo
         if (tiempoEspejismo > 0) {
             tiempoEspejismo -= delta;
 
@@ -127,7 +127,7 @@ public class jefefinalmomonga extends Jefe {
 
     private void elegirDestino() {
         if (espejismoPendiente) {
-            // espejismo: el jefe real va a una esquina al azar
+            
             esquinaReal = MathUtils.random(0, 3);
             destinoX = esquinaX(esquinaReal);
             destinoY = esquinaY(esquinaReal);
@@ -186,7 +186,7 @@ public class jefefinalmomonga extends Jefe {
         // Comienza el tiempo del espejismo
         tiempoEspejismo = DURACION_ESPEJISMO;
 
-        // El jefe también dispara al comenzar
+        // El jefe tambien dispara al comenzar
         disparoDiagonal(pantallaRef);
     }
 

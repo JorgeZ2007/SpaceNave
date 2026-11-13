@@ -31,7 +31,7 @@ public class OndaExpansiva implements HabilidadDefinitiva {
 		if (habilidadActiva) {
 	    	  radioOnda+=velOnda*delta ;
 	    	  
-	    	  // daño a los asteroides
+	    	  // dano a los asteroides
 	    	  for (int i=0; i<balls1.size(); i++) {
 	    		  Ball2 b=balls1.get(i) ;
 	    		  float distancia= (float) Math.hypot(b.getX()-ondaX, b.getY()-ondaY) ;
@@ -43,14 +43,14 @@ public class OndaExpansiva implements HabilidadDefinitiva {
 	    			  GestorPuntaje.getInstancia().derrotarEnemigo() ;
 	    		  }
 	    	  }
-	    	  // daño enemigos
+	    	  // dano enemigos
 	    	  for (EnemigoBase e: enemigo) {
 	    		  float distancia= (float) Math.hypot(e.getX()-ondaX, e.getY()-ondaY) ;
 	    		  if (distancia<=radioOnda) {
 	    			  e.recibirDanio(2) ;
 	    		  }
 	    	  }
-	    	  // daño jefes
+	    	  // dano jefes
 	    	  if (jefe!=null) {
 	    		  float distancia= (float) Math.hypot(jefe.getX()-ondaX, jefe.getY()-ondaY) ;
 	    		  if (distancia<=radioOnda) {

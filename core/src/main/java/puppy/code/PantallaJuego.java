@@ -140,7 +140,7 @@ public class PantallaJuego implements Screen {
 	                    new Texture(Gdx.files.internal("kamikaze.png"))));   
 	        }
 	    }
-	    if (ronda >= 1) {
+	    if (ronda >= 3) {
 	        enemigos.add(new enemigofranco(r.nextInt(Gdx.graphics.getWidth()),
 	                Gdx.graphics.getHeight() - 100,
 	                new Texture(Gdx.files.internal("franco.png")),    // imagen provisoria
@@ -320,10 +320,10 @@ public class PantallaJuego implements Screen {
   		  }
 	      
 	      if (mostrarMensajeOnda) {
-	    	  game.getFont().draw(batch, "¡Habilidad de onda desbloqueda!", 330, 60 ) ;
+	    	  game.getFont().draw(batch, "Habilidad de onda desbloqueda!", 330, 60 ) ;
 	      }
 	      if (mostrarMensajeLaser) {
-	    	  game.getFont().draw(batch, "¡Habilidad de laser desbloqueda!", 330, 60 ) ;
+	    	  game.getFont().draw(batch, "Habilidad de laser desbloqueda!", 330, 60 ) ;
 	      }
 	      
 	      batch.end();
