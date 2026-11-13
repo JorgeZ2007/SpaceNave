@@ -1,4 +1,8 @@
 package puppy.code;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+
+import jefes.* ;
 
 public class GestorRondas {
 	private int ronda ;
@@ -46,6 +50,26 @@ public class GestorRondas {
 		return false ;
 	}
 	
+	public boolean rondaFinal() {
+		if (ronda==6) {
+			return true ;
+		}
+		return false ;
+	}
 	
+	public Jefe jefeRonda(DirectorJefe director, BuilderJefe builder) {
+		Jefe jefe ;
+	
+		if (ronda==4) {
+			return jefe = new jeferonda4(Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() - 150,
+                    new Texture(Gdx.files.internal("jefe2.png")));
+		}
+		else if (ronda==5) {
+			director.construirJefeAparicion2(builder, new Texture(Gdx.files.internal("jefe1.png"))) ;
+			return jefe=builder.getResultado() ;
+		}
+		director.construirJefeAparicion1(builder, new Texture(Gdx.files.internal("jefe1.png"))) ;
+		return jefe=builder.getResultado() ;
+	}
 	
 }

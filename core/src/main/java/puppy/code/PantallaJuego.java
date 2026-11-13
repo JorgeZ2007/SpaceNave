@@ -90,15 +90,13 @@ public class PantallaJuego implements Screen {
 		if (gestor.rondaJefe()) {
 			DirectorJefe director=new DirectorJefe() ;
 			BuilderJefe builder= new BuilderJefe() ;
-			if (ronda == 5) {
-			    jefe = new jefefinalmomonga(Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() - 150,
-			                                     new Texture(Gdx.files.internal("unnamed.png")));   // sprite temporal
-			} else if (ronda == 4) {
-			    jefe = new jeferonda4(Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() - 150,
-			                          new Texture(Gdx.files.internal("jefe2.png")));
-			} else {
-				director.construirJefeAparicion1(builder, new Texture(Gdx.files.internal("jefe1.png"))) ;
-				jefe=builder.getResultado() ;
+			
+			if (gestor.rondaFinal()) {
+				jefe = new jefefinalmomonga(Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() - 150,
+                        new Texture(Gdx.files.internal("unnamed.png")));   // sprite temporal
+			}
+			else {
+				jefe=gestor.jefeRonda(director, builder) ;
 			}
 			
         }
@@ -365,7 +363,7 @@ public class PantallaJuego implements Screen {
 	      }
 	      
 	      if (rondaTerminada) {
-	    	if (ronda>=5) {
+	    	if (ronda>=6) {
 	    		Screen ss = new PantallaFinJuego(game); // aca va pantalla de victoria
 	  			ss.resize(1200, 800);
 	  			game.setScreen(ss);

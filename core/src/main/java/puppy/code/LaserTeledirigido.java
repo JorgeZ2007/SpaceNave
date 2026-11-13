@@ -12,7 +12,7 @@ public class LaserTeledirigido implements HabilidadDefinitiva {
 	private int carga=0 ;
 	private int cargaMaxima=100 ;
 	private float tiempoActivo=0 ;
-	private float tiempoMax=3 ;
+	private float tiempoMax=1 ;
 	
 	public void activarHabilidad(Nave4 nave) {
 		carga=0 ;
