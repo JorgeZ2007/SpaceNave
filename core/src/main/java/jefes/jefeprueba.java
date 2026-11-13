@@ -28,7 +28,7 @@ public class jefeprueba extends Jefe {
     @Override
     protected void mover() {
         spr.setX(spr.getX() + velX);
-        // rebotar en los bordes
+        
         if (spr.getX() < 0 || spr.getX() + spr.getWidth() > Gdx.graphics.getWidth()) {
             velX = -velX;
         }
@@ -64,7 +64,7 @@ public class jefeprueba extends Jefe {
     }
     @Override
     public void recibirDanio(int danio) {
-        if (invulnerable) return;                   // ignora el dano
+        if (invulnerable) return;                   
         super.recibirDanio(danio);
     }
     private void patronCirculo(PantallaJuego pantalla, int cantidad) {

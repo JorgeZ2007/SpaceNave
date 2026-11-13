@@ -11,13 +11,14 @@ import com.badlogic.gdx.math.MathUtils;
 
 
 
+
 public class jeferonda4 extends Jefe {
 
-    // paseo
+ 
     private float velPaseo = 6;
     private float objetivoX, objetivoY;
 
-    // embestida
+    
     private boolean embistiendo = false;
     private int embestidasRestantes = 0;
     private float avisoRestante = 0;
@@ -72,7 +73,7 @@ public class jeferonda4 extends Jefe {
         
     	float cx = spr.getX() + spr.getWidth() / 2;
     	float cy = spr.getY() + spr.getHeight() / 2;
-    	float naveX = nave.getX();      // <- antes naveObjetivo
+    	float naveX = nave.getX();      
         float naveY = nave.getY();
     	float dx = naveX - cx;
     	float dy = naveY - cy;
@@ -127,10 +128,14 @@ public class jeferonda4 extends Jefe {
         float largo = (float) Math.sqrt(dx * dx + dy * dy);
         if (largo == 0) largo = 1;
 
-        // apuntar 150 px mas alla de la nave, sin salirse de la pantalla
+        
         destinoX = MathUtils.clamp(spr.getX() + dx / largo * (largo + 150),
                                    0, Gdx.graphics.getWidth() - spr.getWidth());
         destinoY = MathUtils.clamp(spr.getY() + dy / largo * (largo + 150),
                                    0, Gdx.graphics.getHeight() - spr.getHeight());
+    }
+    @Override
+    public String getRutaMusica() {
+        return "musicajefe2.mp3";     
     }
 }

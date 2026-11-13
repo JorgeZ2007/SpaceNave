@@ -53,7 +53,7 @@ public class enemigosenuelo extends EnemigoBase {
             return;
         }
 
-        // Disparo diagonal cada 1.5 segundos
+        
         if (contadorDisparo >= COOLDOWN_DISPARO) {
 
             dispararDiagonal(pantalla);
@@ -67,7 +67,7 @@ public class enemigosenuelo extends EnemigoBase {
         float x = spr.getX() + spr.getWidth() / 2;
         float y = spr.getY() + spr.getHeight() / 2;
 
-        // Coordenadas de la esquina opuesta
+        
         float objetivoX = Gdx.graphics.getWidth() - x;
         float objetivoY = Gdx.graphics.getHeight() - y;
 

@@ -41,7 +41,7 @@ public class jefefinalmomonga extends Jefe {
     private Sound sonidoEspecial =
             Gdx.audio.newSound(Gdx.files.internal("gritomomonga.mp3"));
 
-    // espejismo
+    
     private boolean espejismoPendiente = false;   // el especial se activo, falta saltar
     private boolean senuelosPendientes = false;   // saltando a una esquina, falta crear las copias
     private int esquinaReal;                      // 0..3: esquina donde esta el jefe verdadero
@@ -53,7 +53,7 @@ public class jefefinalmomonga extends Jefe {
     
 
     public jefefinalmomonga(float x, float y, Texture tx) {
-        super(x, y, 90, tx);   // el 3er dato es la vida
+        super(x, y, 100, tx);   // el 3er dato es la vida
     }
 
     
@@ -61,7 +61,7 @@ public class jefefinalmomonga extends Jefe {
     protected void mover() {
     	float delta = Gdx.graphics.getDeltaTime();
 
-        // Descontar duracion del espejismo
+        
         if (tiempoEspejismo > 0) {
             tiempoEspejismo -= delta;
 
@@ -70,7 +70,7 @@ public class jefefinalmomonga extends Jefe {
             }
         }
 
-        // Mientras haya clones, el jefe no vuelve a teletransportarse
+        
         if (fase == Fase.PRESENTE && tiempoEspejismo > 0) {
             return;
         }
@@ -79,26 +79,26 @@ public class jefefinalmomonga extends Jefe {
 
         switch (fase) {
             case PRESENTE:
-                // quieto y visible; cuando pasa el tiempo, empieza a desaparecer
+               
                 if (tiempoFase >= TIEMPO_PRESENTE || espejismoPendiente) {
                     cambiarFase(Fase.DESAPARECIENDO);
                 }
                 break;
 
             case DESAPARECIENDO:
-                // la opacidad baja de 1 a 0
+                
                 spr.setAlpha(Math.max(0, 1 - tiempoFase / DURACION_FADE));
                 if (tiempoFase >= DURACION_FADE) {
                     spr.setAlpha(0);
                     elegirDestino();
-                    // se manda fuera de la pantalla para que las balas no choquen con un jefe invisible
+                    
                     spr.setPosition(-1000, -1000);
                     cambiarFase(Fase.ESPERANDO);
                 }
                 break;
 
             case ESPERANDO:
-                // invisible; en draw() se muestra una silueta tenue en el destino
+                
                 if (tiempoFase >= TIEMPO_ESPERA) {
                     spr.setPosition(destinoX, destinoY);
                     if (senuelosPendientes) {
@@ -183,10 +183,10 @@ public class jefefinalmomonga extends Jefe {
             );
         }
 
-        // Comienza el tiempo del espejismo
+        
         tiempoEspejismo = DURACION_ESPEJISMO;
 
-        // El jefe tambien dispara al comenzar
+        
         disparoDiagonal(pantallaRef);
     }
 
@@ -198,13 +198,13 @@ public class jefefinalmomonga extends Jefe {
         naveObjetivo = nave;
         pantallaRef = pantalla;
 
-        // Durante el espejismo dispara diagonalmente
+        
         if (tiempoEspejismo > 0) {
             disparoDiagonal(pantalla);
             return;
         }
 
-        // Ataques normales
+        
         if (usarTripleDisparo) {
             tripleDisparo(pantalla, nave);
         } else {
@@ -230,7 +230,7 @@ public class jefefinalmomonga extends Jefe {
         return COOLDOWN_ESPEJISMO;
     }
 
-    // Solo ataca cuando esta presente y visible
+    
     @Override
     protected boolean puedeAtacar() {
         return fase == Fase.PRESENTE && super.puedeAtacar();
@@ -255,7 +255,7 @@ public class jefefinalmomonga extends Jefe {
             float x = spr.getX();
             float y = spr.getY();
             spr.setPosition(destinoX, destinoY);
-            spr.setAlpha(0.15f + 0.25f * (tiempoFase / TIEMPO_ESPERA));   // se va marcando
+            spr.setAlpha(0.15f + 0.25f * (tiempoFase / TIEMPO_ESPERA));  
             super.draw(batch);
             spr.setAlpha(0);
             spr.setPosition(x, y);
@@ -300,7 +300,7 @@ public class jefefinalmomonga extends Jefe {
         float x = spr.getX() + spr.getWidth() / 2;
         float y = spr.getY() + spr.getHeight() / 2;
 
-        // Esquina opuesta respecto al centro de la pantalla
+        
         float objetivoX = Gdx.graphics.getWidth() - x;
         float objetivoY = Gdx.graphics.getHeight() - y;
 
@@ -317,5 +317,8 @@ public class jefefinalmomonga extends Jefe {
         pantalla.agregarBalaEnemiga(
             new Bullet(x, y, vx, vy, txBala)
         );
+    }
+    public String getRutaMusica() {
+        return "musicamomonga.mp3";     
     }
 }

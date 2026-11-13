@@ -10,8 +10,8 @@ import puppy.code.Bullet;
 public class enemigofranco extends EnemigoBase {
 
     private float velocidad = 1.2f;
-    private float distanciaSegura = 350;   // si la nave esta mas cerca que esto, huye
-    private float cooldownDisparo = 2.5f;  // segundos entre disparos
+    private float distanciaSegura = 350;   
+    private float cooldownDisparo = 2.5f;  
     private float contadorDisparo = 0;
     private float velBala = 5;
     private Texture txBala;
@@ -23,14 +23,14 @@ public class enemigofranco extends EnemigoBase {
 
     @Override
     public void update(Nave4 nave, PantallaJuego pantalla) {
-        float dx = spr.getX() - nave.getX();  //(al reves que el perseguidor: del jugador hacia el enemigo)
+        float dx = spr.getX() - nave.getX();  
         float dy = spr.getY() - nave.getY();
         float largo = (float) Math.sqrt(dx*dx + dy*dy); 
         
         if (largo > 0 && largo < distanciaSegura) {
             float nx = spr.getX() + (dx / largo) * velocidad;
             float ny = spr.getY() + (dy / largo) * velocidad;
-            // mantenerlo dentro de la pantalla
+            
             nx = MathUtils.clamp(nx, 40, Gdx.graphics.getWidth()  - spr.getWidth()  - 40);
             ny = MathUtils.clamp(ny, 40, Gdx.graphics.getHeight() - spr.getHeight() - 40);
             spr.setPosition(nx, ny);
@@ -48,7 +48,7 @@ public class enemigofranco extends EnemigoBase {
     	
     	float cx = spr.getX() + spr.getWidth() / 2;
         float cy = spr.getY() + spr.getHeight() / 2;
-        float dx = nave.getX() - cx;              // ahora hacia la nave
+        float dx = nave.getX() - cx;              
         float dy = nave.getY() - cy;
         float largo = (float) Math.sqrt(dx * dx + dy * dy);
         if (largo == 0) return;
@@ -57,7 +57,6 @@ public class enemigofranco extends EnemigoBase {
         float by = cy - 15 + (dy / largo) * (spr.getHeight() / 2 + 10);
 
         pantalla.agregarBalaEnemiga(new Bullet(bx, by,
-                dx / largo * velBala, dy / largo * velBala, txBala)); // esto es para que dispare bien al estar en esquinas
-        //sin esto al disparar en esqiunas no sale la bala
+                dx / largo * velBala, dy / largo * velBala, txBala)); 
     }
 }

@@ -16,7 +16,7 @@ public abstract class Jefe {
     protected int vida;
     protected int vidaMaxima;
 
-    // Contadores para los cooldowns (en frames)
+    
     private float contadorAtaque;
     private float contadorEspecial;
     
@@ -48,7 +48,7 @@ public abstract class Jefe {
             contadorAtaque = 0;
         }
         actualizarFase();
-        // TODO: avanzar los contadores
+        
     }
 
     // ===== PASOS QUE CADA JEFE DEBE DEFINIR =====
@@ -56,7 +56,7 @@ public abstract class Jefe {
     protected abstract void atacar(Nave4 nave, PantallaJuego pantalla);
     protected abstract void ataqueEspecial(Nave4 nave, PantallaJuego pantalla);
 
-    // ===== HOOKS (comportamiento por defecto, se pueden sobreescribir) =====
+    // ===== HOOKS =====
     
     protected float getCooldownAtaque()   { return 1.5f; }
     protected float getCooldownEspecial() { return 10f; }
@@ -71,7 +71,7 @@ public abstract class Jefe {
 
     protected void actualizarFase() { }
 
-    // ===== COMUN A TODOS LOS JEFES =====
+    
     private void reiniciarCargaEspecial() {
         //contadorEspecial = 0
     }

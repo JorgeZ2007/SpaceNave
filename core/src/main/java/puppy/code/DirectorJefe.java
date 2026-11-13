@@ -10,7 +10,7 @@ public class DirectorJefe {
 		
 		builder.reset() ;
 		builder.posicion(posX, posY) 
-			   .vidaMaxima(90) 
+			   .vidaMaxima(50) 
 			   .invulnerabilidadActiva(false)
 			   .texturaJefe(textura) ;
 	}
@@ -21,7 +21,7 @@ public class DirectorJefe {
 		
 		builder.reset() ;
 		builder.posicion(posX, posY) 
-			   .vidaMaxima(150) 
+			   .vidaMaxima(90) 
 			   .invulnerabilidadActiva(true)
 			   .texturaJefe(textura) ;
 	}

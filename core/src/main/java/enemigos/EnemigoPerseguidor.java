@@ -6,10 +6,10 @@ import puppy.code.PantallaJuego;
 
 public class EnemigoPerseguidor extends EnemigoBase {
 
-    private float velocidad = 1.5f;     // mas lento que un asteroide pa q se faicl de esquivar
+    private float velocidad = 1.5f;     
 
     public EnemigoPerseguidor(float x, float y, Texture tx) {
-        super(x, y, 40, 40, 2, tx);     //esto pa calcular su alto y ancho
+        super(x, y, 40, 40, 2, tx);    
     }
 
     @Override
