@@ -36,8 +36,7 @@ public class enemigofranco extends EnemigoBase {
             spr.setPosition(nx, ny);
         }
         // 2. DISPARAR
-        //    contadorDisparo += Gdx.graphics.getDeltaTime();
-        //    si contadorDisparo >= cooldownDisparo: disparar(nave, pantalla) y volver el contador a 0
+        
         contadorDisparo += Gdx.graphics.getDeltaTime();
         if (contadorDisparo >= cooldownDisparo) {
             disparar(nave, pantalla);

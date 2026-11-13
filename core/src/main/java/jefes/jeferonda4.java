@@ -14,14 +14,14 @@ import com.badlogic.gdx.math.MathUtils;
 public class jeferonda4 extends Jefe {
 
     // paseo
-    private float velPaseo = 3;
+    private float velPaseo = 6;
     private float objetivoX, objetivoY;
 
     // embestida
     private boolean embistiendo = false;
     private int embestidasRestantes = 0;
     private float avisoRestante = 0;
-    private float velEmbestida = 14;
+    private float velEmbestida = 20;
     private float destinoX, destinoY;
     private Nave4 naveObjetivo;
 
@@ -29,7 +29,7 @@ public class jeferonda4 extends Jefe {
     private Texture txBala = new Texture(Gdx.files.internal("Rocket2.png"));
 
     public jeferonda4(float x, float y, Texture tx) {
-        super(x, y, 40, tx);          
+        super(x, y, 80, tx);          
         spr.setSize(75, 100);
     }
 

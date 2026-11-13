@@ -5,24 +5,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
+import com.badlogic.gdx.audio.Sound;
+
 import enemigos.enemigosenuelo;
 import puppy.code.Nave4;
 import puppy.code.PantallaJuego;
 import puppy.code.Bullet;
 
-/**
- * Jefe final: aparece en un lugar, se queda un rato, desaparece y
- * reaparece en otro punto de la pantalla.
- *
- * Hijo de Jefe (Template Method): solo escribe los pasos abstractos
- * (mover, atacar, ataqueEspecial) y sobrescribe algunos hooks.
- *
- * El movimiento es una maquina de estados de 4 fases:
- *   PRESENTE -> DESAPARECIENDO -> ESPERANDO -> APARECIENDO -> PRESENTE ...
- *
- * Habilidad especial "espejismo": salta a una esquina y deja 3 copias
- * falsas (JefeSenuelo) en las otras esquinas. Solo una es la real.
- */
+
 public class jefefinalmomonga extends Jefe {
 
     private enum Fase { PRESENTE, DESAPARECIENDO, ESPERANDO, APARECIENDO }
@@ -47,20 +37,45 @@ public class jefefinalmomonga extends Jefe {
     private static final float VEL_BALA = 3;
     private Texture txBala = new Texture(Gdx.files.internal("Rocket2.png"));
     private float desfase = 0;
+    private boolean usarTripleDisparo = false;
+    private Sound sonidoEspecial =
+            Gdx.audio.newSound(Gdx.files.internal("gritomomonga.mp3"));
 
     // espejismo
     private boolean espejismoPendiente = false;   // el especial se activo, falta saltar
     private boolean senuelosPendientes = false;   // saltando a una esquina, falta crear las copias
     private int esquinaReal;                      // 0..3: esquina donde esta el jefe verdadero
+    // Control del espejismo
+    private float tiempoEspejismo = 0f;
+    // Duración del espejismo
+    private static final float DURACION_ESPEJISMO = 10f;
+
+    
 
     public jefefinalmomonga(float x, float y, Texture tx) {
-        super(x, y, 60, tx);   // 60 = vida maxima
+        super(x, y, 90, tx);   // el 3er dato es la vida
     }
 
     // ==================== PASO ABSTRACTO: MOVER ====================
     @Override
     protected void mover() {
-        tiempoFase += Gdx.graphics.getDeltaTime();
+    	float delta = Gdx.graphics.getDeltaTime();
+
+        // Descontar duración del espejismo
+        if (tiempoEspejismo > 0) {
+            tiempoEspejismo -= delta;
+
+            if (tiempoEspejismo < 0) {
+                tiempoEspejismo = 0;
+            }
+        }
+
+        // Mientras haya clones, el jefe no vuelve a teletransportarse
+        if (fase == Fase.PRESENTE && tiempoEspejismo > 0) {
+            return;
+        }
+
+        tiempoFase += delta;
 
         switch (fase) {
             case PRESENTE:
@@ -110,7 +125,6 @@ public class jefefinalmomonga extends Jefe {
         tiempoFase = 0;
     }
 
-    // Elige un punto al azar dentro de la pantalla, lejos de la nave si la conoce
     private void elegirDestino() {
         if (espejismoPendiente) {
             // espejismo: el jefe real va a una esquina al azar
@@ -132,7 +146,6 @@ public class jefefinalmomonga extends Jefe {
                 return;
             }
         }
-        // si en 20 intentos no encontro un punto lejano, se queda con el ultimo
     }
 
     private float distanciaANave(float x, float y) {
@@ -141,7 +154,6 @@ public class jefefinalmomonga extends Jefe {
         return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
-    // Esquinas numeradas: 0 abajo-izq, 1 abajo-der, 2 arriba-izq, 3 arriba-der
     private float esquinaX(int i) {
         return (i % 2 == 0) ? MARGEN : Gdx.graphics.getWidth() - spr.getWidth() - MARGEN;
     }
@@ -150,34 +162,69 @@ public class jefefinalmomonga extends Jefe {
         return (i < 2) ? MARGEN : Gdx.graphics.getHeight() - spr.getHeight() - MARGEN;
     }
 
-    // Pone una copia falsa en cada esquina, menos en la del jefe real
     private void crearSenuelos() {
+
         if (pantallaRef == null) return;
+
         for (int i = 0; i < 4; i++) {
+
             if (i == esquinaReal) continue;
-            pantallaRef.agregarEnemigo(new enemigosenuelo(esquinaX(i), esquinaY(i),
-                    spr.getWidth(), spr.getHeight(), spr.getTexture(), DURACION_SENUELO));
+
+            pantallaRef.agregarEnemigo(
+                new enemigosenuelo(
+                    esquinaX(i),
+                    esquinaY(i),
+                    spr.getWidth(),
+                    spr.getHeight(),
+                    spr.getTexture(),
+                    DURACION_ESPEJISMO,
+                    txBala
+                )
+            );
         }
+
+        // Comienza el tiempo del espejismo
+        tiempoEspejismo = DURACION_ESPEJISMO;
+
+        // El jefe también dispara al comenzar
+        disparoDiagonal(pantallaRef);
     }
 
-    // ==================== PASO ABSTRACTO: ATACAR ====================
+    
+    
     @Override
     protected void atacar(Nave4 nave, PantallaJuego pantalla) {
+
         naveObjetivo = nave;
         pantallaRef = pantalla;
-        patronCirculo(pantalla, 16);
-        desfase += 11.25f;       // la proxima vez, los huecos quedan en otro lugar
+
+        // Durante el espejismo dispara diagonalmente
+        if (tiempoEspejismo > 0) {
+            disparoDiagonal(pantalla);
+            return;
+        }
+
+        // Ataques normales
+        if (usarTripleDisparo) {
+            tripleDisparo(pantalla, nave);
+        } else {
+            patronCirculo(pantalla, 16);
+            desfase += 11.25f;
+        }
+
+        usarTripleDisparo = !usarTripleDisparo;
     }
 
-    // ==================== PASO ABSTRACTO: ATAQUE ESPECIAL ====================
     @Override
     protected void ataqueEspecial(Nave4 nave, PantallaJuego pantalla) {
-        naveObjetivo = nave;
-        pantallaRef = pantalla;
-        espejismoPendiente = true;   // mover() hace el salto a la esquina y crea las copias
+    	 naveObjetivo = nave;
+    	 pantallaRef = pantalla;
+
+    	 sonidoEspecial.play();
+
+    	 espejismoPendiente = true;   
     }
 
-    // ==================== HOOKS ====================
     @Override
     protected float getCooldownEspecial() {
         return COOLDOWN_ESPEJISMO;
@@ -194,14 +241,14 @@ public class jefefinalmomonga extends Jefe {
         return fase == Fase.PRESENTE && super.puedeUsarEspecial();
     }
 
-    // No recibe dano mientras desaparece, espera o aparece
+    
     @Override
     public void recibirDanio(int danio) {
         if (fase != Fase.PRESENTE) return;
         super.recibirDanio(danio);
     }
 
-    // Mientras esta invisible, se dibuja una silueta tenue en el destino como aviso
+    
     @Override
     public void draw(SpriteBatch batch) {
         if (fase == Fase.ESPERANDO) {
@@ -225,5 +272,50 @@ public class jefefinalmomonga extends Jefe {
             float vy = VEL_BALA * MathUtils.sinDeg(angulo);
             pantalla.agregarBalaEnemiga(new Bullet(x, y, vx, vy, txBala));
         }
+    }
+    private void tripleDisparo(PantallaJuego pantalla, Nave4 nave) {
+
+        float x = spr.getX() + spr.getWidth() / 2;
+        float y = spr.getY() + spr.getHeight() / 2;
+        float dx = nave.getX() - x;
+        float dy = nave.getY() - y;
+        float angulo = MathUtils.atan2(dy, dx) * MathUtils.radiansToDegrees;
+
+        float velocidad = 4f;
+
+        for (int i = -1; i <= 1; i++) {
+
+            float anguloBala = angulo + i * 15f;
+
+            float vx = velocidad * MathUtils.cosDeg(anguloBala);
+            float vy = velocidad * MathUtils.sinDeg(anguloBala);
+
+            pantalla.agregarBalaEnemiga(
+                new Bullet(x, y, vx, vy, txBala)
+            );
+        }
+    }
+    private void disparoDiagonal(PantallaJuego pantalla) {
+
+        float x = spr.getX() + spr.getWidth() / 2;
+        float y = spr.getY() + spr.getHeight() / 2;
+
+        // Esquina opuesta respecto al centro de la pantalla
+        float objetivoX = Gdx.graphics.getWidth() - x;
+        float objetivoY = Gdx.graphics.getHeight() - y;
+
+        float dx = objetivoX - x;
+        float dy = objetivoY - y;
+
+        float distancia = (float) Math.sqrt(dx * dx + dy * dy);
+
+        if (distancia == 0) return;
+
+        float vx = VEL_BALA * dx / distancia;
+        float vy = VEL_BALA * dy / distancia;
+
+        pantalla.agregarBalaEnemiga(
+            new Bullet(x, y, vx, vy, txBala)
+        );
     }
 }

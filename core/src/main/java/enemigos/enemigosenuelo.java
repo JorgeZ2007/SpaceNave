@@ -5,39 +5,87 @@ import com.badlogic.gdx.graphics.Texture;
 
 import puppy.code.Nave4;
 import puppy.code.PantallaJuego;
+import puppy.code.Bullet;
 
-/**
- * Copia falsa del jefe final (habilidad "espejismo").
- * Es un enemigo normal (hijo de EnemigoBase): 1 de vida, no se mueve,
- * no da puntos y desaparece sola pasado un tiempo.
- */
 public class enemigosenuelo extends EnemigoBase {
 
-    private static final float DURACION_FADE = 0.3f;   // segundos que tarda en aparecer
-    private static final float OPACIDAD = 0.8f;        // pista sutil para el jugador (1 = identico al jefe real)
+    private static final float DURACION_FADE = 0.3f;
+    private static final float OPACIDAD = 0.8f;
 
-    private final float vidaUtil;   // segundos antes de desaparecer sola
+    private static final float VEL_BALA = 3f;
+    private static final float COOLDOWN_DISPARO = 1.5f;
+
+    private final float vidaUtil;
     private float tiempo = 0;
 
-    public enemigosenuelo(float x, float y, float ancho, float alto, Texture tx, float vidaUtil) {
-        super(x, y, ancho, alto, 1, tx);   // 1 de vida: muere de un disparo
+    private float contadorDisparo = COOLDOWN_DISPARO;
+
+    private Texture txBala;
+
+    public enemigosenuelo(
+            float x, float y,
+            float ancho, float alto,
+            Texture tx, float vidaUtil,
+            Texture txBala) {
+
+        super(x, y, ancho, alto, 1, tx);
+
         this.vidaUtil = vidaUtil;
-        spr.setAlpha(0);                   // aparece con un fundido
+        this.txBala = txBala;
+
+        spr.setAlpha(0);
     }
 
     @Override
     public void update(Nave4 nave, PantallaJuego pantalla) {
-        tiempo += Gdx.graphics.getDeltaTime();
-        spr.setAlpha(OPACIDAD * Math.min(1, tiempo / DURACION_FADE));
+
+        float delta = Gdx.graphics.getDeltaTime();
+
+        tiempo += delta;
+        contadorDisparo += delta;
+
+        spr.setAlpha(
+            OPACIDAD * Math.min(1, tiempo / DURACION_FADE)
+        );
 
         if (tiempo >= vidaUtil) {
-            vida = 0;   // PantallaJuego la saca de la lista
+            vida = 0;
+            return;
         }
 
-        //disparar algo debil para que no sea un blanco gratis
+        // Disparo diagonal cada 1.5 segundos
+        if (contadorDisparo >= COOLDOWN_DISPARO) {
+
+            dispararDiagonal(pantalla);
+
+            contadorDisparo = 0;
+        }
     }
 
-    // No da puntos ni carga de ulti (si no, se podrian "farmear")
+    private void dispararDiagonal(PantallaJuego pantalla) {
+
+        float x = spr.getX() + spr.getWidth() / 2;
+        float y = spr.getY() + spr.getHeight() / 2;
+
+        // Coordenadas de la esquina opuesta
+        float objetivoX = Gdx.graphics.getWidth() - x;
+        float objetivoY = Gdx.graphics.getHeight() - y;
+
+        float dx = objetivoX - x;
+        float dy = objetivoY - y;
+
+        float distancia = (float) Math.sqrt(dx * dx + dy * dy);
+
+        if (distancia == 0) return;
+
+        float vx = VEL_BALA * dx / distancia;
+        float vy = VEL_BALA * dy / distancia;
+
+        pantalla.agregarBalaEnemiga(
+            new Bullet(x, y, vx, vy, txBala)
+        );
+    }
+
     @Override
     public boolean daRecompensa() {
         return false;

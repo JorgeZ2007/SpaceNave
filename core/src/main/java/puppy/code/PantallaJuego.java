@@ -92,7 +92,7 @@ public class PantallaJuego implements Screen {
 			BuilderJefe builder= new BuilderJefe() ;
 			if (ronda == 5) {
 			    jefe = new jefefinalmomonga(Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() - 150,
-			                                     new Texture(Gdx.files.internal("aGreyLarge.png")));   // sprite temporal
+			                                     new Texture(Gdx.files.internal("unnamed.png")));   // sprite temporal
 			} else if (ronda == 4) {
 			    jefe = new jeferonda4(Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() - 150,
 			                          new Texture(Gdx.files.internal("jefe2.png")));
@@ -145,7 +145,7 @@ public class PantallaJuego implements Screen {
 	    if (ronda >= 1) {
 	        enemigos.add(new enemigofranco(r.nextInt(Gdx.graphics.getWidth()),
 	                Gdx.graphics.getHeight() - 100,
-	                new Texture(Gdx.files.internal("aGreyLarge.png")),    // imagen provisoria
+	                new Texture(Gdx.files.internal("franco.png")),    // imagen provisoria
 	                new Texture(Gdx.files.internal("Rocket2.png"))));      // bala
 	    }
 	    
