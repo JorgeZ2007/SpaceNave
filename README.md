@@ -1,43 +1,30 @@
-# SpaceNav2024
+# Odisea Espacial
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+Proyecto de videojuego desarrollado en Java utilizando el framework **LibGDX**, implementando patrones de diseño (como Strategy y Template Method), clases abstractas e interfaces orientadas a objetos.
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+---
 
-## Platforms
+## Requisitos Previos
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+Antes de ejecutar el proyecto, asegúrate de contar con lo siguiente:
+* **Java Development Kit (JDK 11)** configurado en tu entorno de desarrollo.
+* **Eclipse IDE** (o cualquier entorno compatible con proyectos Gradle).
+* El entorno configurado con **Gradle (versión 7.4.2)** para la gestión correcta de dependencias.
 
-## Gradle
+---
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
+## Cómo Ejecutar el Juego
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
+Sigue los pasos a continuación para compilar y ejecutar el proyecto directamente desde Eclipse:
 
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+1. Abre tu entorno de desarrollo **Eclipse**.
+2. Ubica la estructura del proyecto en el explorador de archivos (*Package Explorer*).
+3. Navega hasta la ruta del submódulo de escritorio:  
+   `SpaceNav2024-lwjgl3` ➔ `src/main/java` ➔ paquete **`io.github.spacenav.lwjgl3`**.
+4. Haz clic derecho sobre la clase **`Lwjgl3Launcher.java`**.
+5. Selecciona la opción **"Run As"**.
+6. Elige **"Java Application"**. 
 
+¡Y listo! La ventana del juego se abrirá para que puedas comenzar a jugar.
 
-
-
-
-==============================
-#COMO EJECUTAR EL JUEGO
-==============================
-
-En la parte de SpaceNav2024-lwjgl3, en la carpeta de src/main/java dentro del paquete "io.github.spacenav.lwjgl3", haga clic derecho sobre la clase Lwjgl3Launcher.java y elija la opcion "Run as" y escoja "Java application" y listo!!!! ya puede jugar nuestro juego
+---
