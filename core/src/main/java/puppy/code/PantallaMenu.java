@@ -38,7 +38,7 @@ public class PantallaMenu implements Screen {
 
 		// Si el usuario presiona cualquier tecla o hace clic, inicia el juego
 		if (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
-			Screen ss = new PantallaJuego(game, 1, 500, 0, 0);
+			Screen ss = new PantallaJuego(game, 1, 25, 0, 0);
 			ss.resize(1200, 800);
 			game.setScreen(ss);
 			dispose();

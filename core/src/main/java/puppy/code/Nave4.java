@@ -20,7 +20,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class Nave4 {
 	
 	private boolean destruida = false;
-    private int vidas = 3;
+    private int vidas = 5;
     private float xVel = 0;
     private int danio = 1; // Dano base inicial de los disparos de la nave
     private float yVel = 0;
