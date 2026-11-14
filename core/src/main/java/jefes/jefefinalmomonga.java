@@ -42,9 +42,9 @@ public class jefefinalmomonga extends Jefe {
             Gdx.audio.newSound(Gdx.files.internal("gritomomonga.mp3"));
 
     
-    private boolean espejismoPendiente = false;   // el especial se activo, falta saltar
-    private boolean senuelosPendientes = false;   // saltando a una esquina, falta crear las copias
-    private int esquinaReal;                      // 0..3: esquina donde esta el jefe verdadero
+    private boolean espejismoPendiente = false;   
+    private boolean senuelosPendientes = false;   
+    private int esquinaReal;                      
     // Control del espejismo
     private float tiempoEspejismo = 0f;
     // Duracion del espejismo
